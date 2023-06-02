@@ -37,3 +37,6 @@ vim.keymap.set('n', '<Leader>q1', ':lua delete_important_file(1) <CR>')
 vim.keymap.set('n', '<Leader>q2', ':lua delete_important_file(2) <CR>')
 vim.keymap.set('n', '<Leader>q3', ':lua delete_important_file(3) <CR>')
 vim.keymap.set('n', '<Leader>q4', ':lua delete_important_file(4) <CR>')
+
+-- Brackets complete on enter.
+vim.keymap.set('i', '{<CR>', '{<CR>}<ESC>O')

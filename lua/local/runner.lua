@@ -19,6 +19,28 @@ local function contains(tbl)
     return false
 end
 
+local function get_basename(str)
+    local current = ""
+    for token in string.gmatch(str, "([^/]+)") do
+        current = token
+    end
+
+    local dir = current
+    return dir
+end
+
+local function get_dir(str)
+    local current = ""
+    local previous = ""
+    for token in string.gmatch(str, "([^/]+)") do
+        previous = current
+        current = token
+    end
+
+    local dir = previous
+    return dir
+end
+
 local function run_code_new_window(run_cmd)
     -- Update current working window
     if run_cmd ~= "" then
@@ -86,6 +108,9 @@ local function get_run_command()
     -- Use run_command if it is set
     local run_cmd = ""
     local filename = vim.api.nvim_buf_get_name(0)
+    local dir = get_dir(filename)
+    local base_file = get_basename(filename);
+
     if vim.g["run_command"] ~= nil then
         run_cmd = vim.g["run_command"]
     else
@@ -97,7 +122,16 @@ local function get_run_command()
             run_cmd = "dotnet run"
         end
         if ft == "rust" then
-            run_cmd = "cargo run"
+            if dir == "examples" then
+                local length = string.len(base_file)
+                local trimmed_filename = string.sub(base_file, 0, length - 3)
+                print("Cut str = " .. trimmed_filename)
+
+
+                run_cmd = "cargo run --quiet --example " .. trimmed_filename
+            else
+                run_cmd = "cargo run"
+            end
         end
         if ft == "lua" then
             run_cmd = "lua " .. filename
