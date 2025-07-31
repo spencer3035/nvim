@@ -1,7 +1,10 @@
+-- STATIC OPTIONS
+
 vim.g.mapleader = ' '
 
 -- Spacing
 vim.opt.shiftwidth = 4;
+vim.opt.signcolumn = "yes";
 vim.opt.tabstop = 4;
 vim.opt.expandtab = true;
 vim.diagnostic.config(
@@ -14,24 +17,7 @@ vim.diagnostic.config(
 vim.opt.number = true;
 vim.opt.relativenumber = true;
 
-vim.api.nvim_create_autocmd(
-
-    {
-        "FileType"
-    },
-    {
-        pattern  = { "*.rs" },
-        command = "wincmd L",
-    }
-)
-
--- BINDINGS
--- Shortcuts for common stuff
-vim.keymap.set('n', '<leader>so', ':update<CR>:so ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua<CR>')
-vim.keymap.set('n', '<leader>q', ':q ')
--- Language server specific bindings
-vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format)
-
+-- PLUGINS
 vim.pack.add({
     -- BEGIN EXPERIMENTAL PLUGINS
     { src = 'https://github.com/mluders/comfy-line-numbers.nvim' },
@@ -44,8 +30,48 @@ vim.pack.add({
     { src = 'https://github.com/neovim/nvim-lspconfig' },
 })
 
+-- Put help text to right side instead of top
+vim.api.nvim_create_autocmd(
+    "FileType",
+    { pattern = { "help" }, command = "wincmd L", }
+)
+
+vim.api.nvim_create_autocmd(
+    "BufWritePre",
+    { pattern = { "*.rs", "*.lua" }, callback = function() vim.lsp.buf.format({ async = false }) end }
+)
+
+function CloseHelpOrTmpWindow()
+    local windows = vim.api.nvim_list_wins();
+    for _, win in ipairs(windows) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        local filetype = vim.api.nvim_get_option_value("filetype", { buf = buf })
+        if filetype == "help" then
+            vim.api.nvim_win_close(win, false)
+        end
+    end
+end
+
+function RunCommandInTerminal()
+
+end
+
+-- BINDINGS
+
+-- Shortcuts for common stuff
+vim.keymap.set('n', '<leader>so', ':update<CR>:so ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua<CR>')
+vim.keymap.set('n', '<leader>q', ':q')
+vim.keymap.set('n', '<leader>d', ':lua CloseHelpOrTmpWindow()<CR>')
+vim.keymap.set('n', '<leader>sf', ':Pick files')
+vim.keymap.set('n', '<leader>sg', ':Pick grep')
+
+-- Language server specific bindings
+vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format)
+
+
 
 require("mason").setup()
+require("mini.pick").setup()
 
 
 -- Configure lua's langauge server, mostly for editing vim configs
@@ -87,4 +113,4 @@ vim.lsp.config('lua_ls', {
     }
 })
 
-vim.lsp.enable({ "lua_ls", "rust_analyzer" })
+vim.lsp.enable({ "lua_ls", "rust_analyzer", "rustfmt" })
