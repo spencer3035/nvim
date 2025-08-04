@@ -29,8 +29,22 @@ vim.pack.add({
     { src = 'https://github.com/mason-org/mason.nvim' },
     -- For automatic LSP configuration
     { src = 'https://github.com/neovim/nvim-lspconfig' },
+    -- For better syntax highlighting
+    { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+    -- Colorscheme
+    { src = "https://github.com/folke/tokyonight.nvim" },
 })
 
+-- Remember last position
+vim.api.nvim_create_autocmd("BufReadPost", {
+    callback = function()
+        local mark = vim.api.nvim_buf_get_mark(0, '"')
+        local lcount = vim.api.nvim_buf_line_count(0)
+        if mark[1] > 0 and mark[1] <= lcount then
+            pcall(vim.api.nvim_win_set_cursor, 0, { mark[1], mark[2] })
+        end
+    end,
+})
 
 
 -- Put help text to right side instead of top
@@ -46,22 +60,59 @@ vim.api.nvim_create_autocmd(
 
 -- BINDINGS
 vim.keymap.set('n', '<leader>so', ':update<CR>:so ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua<CR>')
+vim.keymap.set('n', '<leader>ce', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua<CR>')
 vim.keymap.set('n', '<leader>q', ':q')
 vim.keymap.set('n', '<leader>sf', ':Pick files<CR>')
 vim.keymap.set('n', '<leader>sg', ':Pick grep<CR>')
 vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format)
+vim.keymap.set({ 'n', 'v', 'x' }, '<leader>y', [["+y]], { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'v', 'x' }, '<leader>p', [["+p]], { noremap = true, silent = true })
 
-vim.keymap.set('i', '\'', '\'\'<left>');
-vim.keymap.set('i', '"', '""<left>');
-vim.keymap.set('i', '(', '()<left>');
-vim.keymap.set('i', '{', '{}<left>');
+-- vim.keymap.set('i', '\'\'', '\'\'<left>');
+-- vim.keymap.set('i', '""', '""<left>');
+-- vim.keymap.set('i', '((', '()<left>');
+-- vim.keymap.set('i', '{{', '{}<left>');
 vim.keymap.set('i', '{<CR>', '{<CR>}<ESC>O');
+vim.keymap.set('i', '(<CR>', '(<CR>)<ESC>O');
 
 vim.keymap.set('n', '<leader>t', ':lua TermTest()<CR>')
 vim.keymap.set('n', '<leader>f', ':lua TermRun()<CR>')
 vim.keymap.set('n', '<leader>d', ':ToggleTerm<CR>')
 
 vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
+
+-- digraphs
+vim.cmd('digraphs f, ' .. vim.fn.char2nr("，"))
+vim.cmd('digraphs f: ' .. vim.fn.char2nr("："))
+vim.cmd('digraphs f? ' .. vim.fn.char2nr("？"))
+
+local function capture_output(cmd)
+    -- Capture output of any command as a string
+    local output = vim.fn.execute(cmd)
+    local lines = vim.split(output, "\n", { plain = true })
+
+    -- Open a new scratch buffer in a split
+    vim.cmd("botright new")
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+
+    -- Make it a clean scratch buffer
+    vim.bo.buftype = "nofile"
+    vim.bo.bufhidden = "wipe"
+    vim.bo.swapfile = false
+    vim.bo.filetype = "output"
+    vim.wo.wrap = false
+    vim.wo.number = false
+end
+
+-- Create the user command :CaptureOutput {cmd}
+--
+-- This takes the output of the command and puts it in a scratch buffer instead of the internal pager.
+vim.api.nvim_create_user_command("CaptureOutput", function(opts)
+    capture_output(opts.args)
+end, {
+    nargs = "+",         -- Require at least one arg (the command)
+    complete = "command" -- Allow tab-completion of commands
+})
 
 local function debug_function()
     print("You found my debug function! Nothing do see here")
@@ -159,9 +210,38 @@ require("toggleterm").setup({
     shade_terminals = true,
 })
 
+-- Configure plugins
+
+vim.cmd('colorscheme tokyonight')
+require 'nvim-treesitter.configs'.setup {
+    -- A list of parser names, or "all" (the listed parsers MUST always be installed)
+    ensure_installed = { "c", "cpp", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline" },
+
+    -- Install parsers synchronously (only applied to `ensure_installed`)
+    sync_install = false,
+
+    -- Automatically install missing parsers when entering buffer
+    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+    auto_install = true,
+
+    -- List of parsers to ignore installing (or "all")
+    ignore_install = {},
+
+    ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
+    -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
+
+    highlight = {
+        enable = true,
+        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+        -- Using this option may slow down your editor, and you may see some duplicate highlights.
+        -- Instead of true it can also be a list of languages
+        additional_vim_regex_highlighting = false,
+    },
+}
+
 require("mason").setup()
 require("mini.pick").setup()
-
 
 -- Configure lua's langauge server, mostly for editing vim configs
 vim.lsp.config('lua_ls', {
