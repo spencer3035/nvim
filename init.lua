@@ -2,6 +2,9 @@
 
 vim.g.mapleader = ' '
 
+-- vim.g.netrw_keepdir = 0;
+-- vim.g.netrw_localcopydircmd = "cp -r"
+
 -- Spacing
 vim.opt.shiftwidth = 4;
 vim.opt.signcolumn = "yes";
@@ -31,7 +34,7 @@ vim.pack.add({
     -- For installing LSP servers automatically
     { src = 'https://github.com/mason-org/mason.nvim' },
     -- For automatic LSP configuration
-    { src = 'https://github.com/neovim/nvim-lspconfig' },
+    -- { src = 'https://github.com/neovim/nvim-lspconfig' },
     -- For better syntax highlighting
     { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
     -- Colorscheme
@@ -256,17 +259,17 @@ require("mason").setup()
 require("mini.pick").setup()
 
 -- Configure lua's langauge server, mostly for editing vim configs
-vim.lsp.config('lua_ls', {
-    settings = {
-        Lua = {
-            workspace = {
-                library = vim.api.nvim_get_runtime_file("", true)
-            }
-        }
-    }
-})
+-- vim.lsp.config('lua_ls', {
+--     settings = {
+--         Lua = {
+--             workspace = {
+--                 library = vim.api.nvim_get_runtime_file("", true)
+--             }
+--         }
+--     }
+-- })
 
-vim.lsp.config("rnix-lsp", {})
+-- vim.lsp.config("rnix-lsp", {})
 
 vim.lsp.enable({
     "lua_ls",
