@@ -17,6 +17,9 @@ vim.diagnostic.config(
 vim.opt.number = true;
 vim.opt.relativenumber = true;
 
+-- visuals
+vim.opt.winborder = "rounded"
+
 -- PLUGINS
 vim.pack.add({
     -- BEGIN EXPERIMENTAL PLUGINS
@@ -43,7 +46,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
         if
             mark[1] > 0 and
             mark[1] <= lcount and
-            not vim.bo.filetype == 'gitcommit'
+            not (vim.bo.filetype == 'gitcommit')
         then
             pcall(vim.api.nvim_win_set_cursor, 0, { mark[1], mark[2] })
         end
@@ -257,40 +260,12 @@ require("mini.pick").setup()
 
 -- Configure lua's langauge server, mostly for editing vim configs
 vim.lsp.config('lua_ls', {
-    on_init = function(client)
-        if client.workspace_folders then
-            local path = client.workspace_folders[1].name
-            if
-                path ~= vim.fn.stdpath('config')
-                and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
-            then
-                return
-            end
-        end
-
-        client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-            runtime = {
-                -- Tell the language server which version of Lua you're using (most
-                -- likely LuaJIT in the case of Neovim)
-                version = 'LuaJIT',
-                -- Tell the language server how to find Lua modules same way as Neovim
-                -- (see `:h lua-module-load`)
-                path = {
-                    'lua/?.lua',
-                    'lua/?/init.lua',
-                },
-            },
-            -- Make the server aware of Neovim runtime files
-            workspace = {
-                checkThirdParty = false,
-                library = {
-                    vim.env.VIMRUNTIME
-                }
-            }
-        })
-    end,
     settings = {
-        Lua = {}
+        Lua = {
+            workspace = {
+                library = vim.api.nvim_get_runtime_file("", true)
+            }
+        }
     }
 })
 
