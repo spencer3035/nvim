@@ -64,10 +64,15 @@ vim.api.nvim_create_autocmd(
 )
 
 -- BINDINGS
+-- source init.lua
 vim.keymap.set('n', '<leader>so', ':update<CR>:so ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua<CR>')
+-- Edit init.lua (config edit)
 vim.keymap.set('n', '<leader>ce', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua<CR>')
+-- Quicker way to quit
 vim.keymap.set('n', '<leader>q', ':q')
+-- Search files
 vim.keymap.set('n', '<leader>sf', ':Pick files<CR>')
+-- Search by grep
 vim.keymap.set('n', '<leader>sg', ':Pick grep<CR>')
 vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format)
 vim.keymap.set('n', '<leader>gd', vim.lsp.buf.definition)
@@ -125,7 +130,7 @@ local function debug_function()
     print("You found my debug function! Nothing do see here")
 end
 
-local function runNewTerminalCommand(cmd)
+local function run_new_terminal_command(cmd)
     vim.cmd("TermExec direction=vertical cmd=clear")
     vim.cmd("TermExec direction=vertical cmd=\"" .. cmd .. "\"")
 end
@@ -192,14 +197,14 @@ end
 function TermRun()
     local cmd = getProjectCommand(false);
     if cmd ~= nil then
-        runNewTerminalCommand(cmd)
+        run_new_terminal_command(cmd)
     end
 end
 
 function TermTest()
     local cmd = getProjectCommand(true);
     if cmd ~= nil then
-        runNewTerminalCommand(cmd)
+        run_new_terminal_command(cmd)
     end
 end
 
@@ -218,8 +223,8 @@ require("toggleterm").setup({
 })
 
 -- Configure plugins
-
 vim.cmd('colorscheme tokyonight')
+
 require 'nvim-treesitter.configs'.setup {
     -- A list of parser names, or "all" (the listed parsers MUST always be installed)
     ensure_installed = { "c", "cpp", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline" },
@@ -292,4 +297,10 @@ vim.lsp.config('lua_ls', {
 -- vim.lsp.config("rnix-lsp", {})
 -- vim.lsp.config("nixfmt", {})
 
-vim.lsp.enable({ "lua_ls", "rust_analyzer", "rustfmt", "nixfmt", "rnix" })
+vim.lsp.enable({
+    "lua_ls",
+    "rust_analyzer",
+    "rustfmt",
+    "nixfmt",
+    "rnix"
+})
