@@ -40,7 +40,11 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     callback = function()
         local mark = vim.api.nvim_buf_get_mark(0, '"')
         local lcount = vim.api.nvim_buf_line_count(0)
-        if mark[1] > 0 and mark[1] <= lcount then
+        if
+            mark[1] > 0 and
+            mark[1] <= lcount and
+            not vim.bo.filetype == 'gitcommit'
+        then
             pcall(vim.api.nvim_win_set_cursor, 0, { mark[1], mark[2] })
         end
     end,
@@ -53,6 +57,7 @@ vim.api.nvim_create_autocmd(
     { pattern = { "help" }, command = "wincmd L", }
 )
 
+-- Which filetypes to automatically format
 vim.api.nvim_create_autocmd(
     "BufWritePre",
     { pattern = { "*.rs", "*.lua" }, callback = function() vim.lsp.buf.format({ async = false }) end }
@@ -65,6 +70,8 @@ vim.keymap.set('n', '<leader>q', ':q')
 vim.keymap.set('n', '<leader>sf', ':Pick files<CR>')
 vim.keymap.set('n', '<leader>sg', ':Pick grep<CR>')
 vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format)
+vim.keymap.set('n', '<leader>gd', vim.lsp.buf.definition)
+
 vim.keymap.set({ 'n', 'v', 'x' }, '<leader>y', [["+y]], { noremap = true, silent = true })
 vim.keymap.set({ 'n', 'v', 'x' }, '<leader>p', [["+p]], { noremap = true, silent = true })
 
@@ -282,4 +289,7 @@ vim.lsp.config('lua_ls', {
     }
 })
 
-vim.lsp.enable({ "lua_ls", "rust_analyzer", "rustfmt" })
+-- vim.lsp.config("rnix-lsp", {})
+-- vim.lsp.config("nixfmt", {})
+
+vim.lsp.enable({ "lua_ls", "rust_analyzer", "rustfmt", "nixfmt", "rnix" })
