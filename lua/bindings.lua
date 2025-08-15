@@ -1,0 +1,47 @@
+local fn = require('fn')
+
+-- source init.lua
+vim.keymap.set('n', '<leader>so', ':update<CR>:so ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua<CR>')
+-- Edit init.lua (config edit)
+vim.keymap.set('n', '<leader>ce', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua<CR>')
+-- Quicker way to quit
+vim.keymap.set('n', '<leader>q', ':q')
+-- Search files
+vim.keymap.set('n', '<leader>sf', ':Pick files<CR>')
+-- Search by grep
+vim.keymap.set('n', '<leader>sg', ':Pick grep<CR>')
+vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format)
+vim.keymap.set('n', '<leader>gd', vim.lsp.buf.definition)
+
+vim.keymap.set({ 'n', 'v', 'x' }, '<leader>y', [["+y]], { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'v', 'x' }, '<leader>p', [["+p]], { noremap = true, silent = true })
+
+-- vim.keymap.set('i', '\'\'', '\'\'<left>');
+-- vim.keymap.set('i', '""', '""<left>');
+-- vim.keymap.set('i', '((', '()<left>');
+-- vim.keymap.set('i', '{{', '{}<left>');
+vim.keymap.set('i', '{<CR>', '{<CR>}<ESC>O');
+vim.keymap.set('i', '(<CR>', '(<CR>)<ESC>O');
+
+vim.keymap.set('n', '<leader>t', fn.TermTest)
+vim.keymap.set('n', '<leader>f', fn.TermRun)
+vim.keymap.set('n', '<leader>d', ':ToggleTerm<CR>')
+
+vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
+
+-- digraphs
+vim.cmd('digraphs f, ' .. vim.fn.char2nr("，"))
+vim.cmd('digraphs f: ' .. vim.fn.char2nr("："))
+vim.cmd('digraphs f? ' .. vim.fn.char2nr("？"))
+
+-- User commands
+
+-- Create the user command :CaptureOutput {cmd}
+--
+-- This takes the output of the command and puts it in a scratch buffer instead of the internal pager.
+vim.api.nvim_create_user_command("CaptureOutput", function(opts)
+    fn.capture_output(opts.args)
+end, {
+    nargs = "+",         -- Require at least one arg (the command)
+    complete = "command" -- Allow tab-completion of commands
+})
