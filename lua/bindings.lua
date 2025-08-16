@@ -3,7 +3,7 @@ local fn = require('fn')
 -- source init.lua
 vim.keymap.set('n', '<leader>so', fn.reload_config)
 -- Edit init.lua (config edit)
-vim.keymap.set('n', '<leader>ce', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua<CR>')
+vim.keymap.set('n', '<leader>ce', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua | tcd %:p:h<CR>')
 -- Quicker way to quit
 vim.keymap.set('n', '<leader>q', ':q')
 -- Search files
@@ -45,8 +45,8 @@ vim.keymap.set('i', "<C-k>", function() ls.jump(-1) end, { silent = true })
 --
 -- This takes the output of the command and puts it in a scratch buffer instead of the internal pager.
 vim.api.nvim_create_user_command("CaptureOutput", function(opts)
-	fn.capture_output(opts.args)
+    fn.capture_output(opts.args)
 end, {
-	nargs = "+",     -- Require at least one arg (the command)
-	complete = "command" -- Allow tab-completion of commands
+    nargs = "+",         -- Require at least one arg (the command)
+    complete = "command" -- Allow tab-completion of commands
 })
