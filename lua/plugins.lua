@@ -16,7 +16,11 @@ vim.pack.add({
     { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
     -- Colorscheme
     { src = "https://github.com/folke/tokyonight.nvim" },
+    { src = "https://github.com/L3MON4D3/LuaSnip" },
 })
+
+require('luasnip').setup({ enable_autosnippets = true });
+require('luasnip.loaders.from_lua').load({ paths = "~/.config/nvim/snippets" });
 
 require("toggleterm").setup({
     size = function(term)

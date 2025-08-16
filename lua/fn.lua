@@ -3,6 +3,14 @@
 
 local M = {}
 
+function M.reload_config()
+    package.loaded.plugins = nil;
+    package.loaded.settings = nil;
+    package.loaded.bindings = nil;
+    package.loaded.auto_commands = nil;
+    dofile(vim.fn.stdpath("config") .. "/init.lua")
+end
+
 -- Captures output of arbitraty ex command to a scratch buffer for seraching or copying from
 function M.capture_output(cmd)
     -- Capture output of any command as a string

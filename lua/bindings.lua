@@ -1,7 +1,7 @@
 local fn = require('fn')
 
 -- source init.lua
-vim.keymap.set('n', '<leader>so', ':update<CR>:so ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua<CR>')
+vim.keymap.set('n', '<leader>so', fn.reload_config)
 -- Edit init.lua (config edit)
 vim.keymap.set('n', '<leader>ce', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua<CR>')
 -- Quicker way to quit
@@ -34,14 +34,19 @@ vim.cmd('digraphs f, ' .. vim.fn.char2nr("，"))
 vim.cmd('digraphs f: ' .. vim.fn.char2nr("："))
 vim.cmd('digraphs f? ' .. vim.fn.char2nr("？"))
 
+local ls = require('luasnip');
+vim.keymap.set('i', "<C-l>", function() ls.expand() end, { silent = true })
+vim.keymap.set('i', "<C-j>", function() ls.jump(1) end, { silent = true })
+vim.keymap.set('i', "<C-k>", function() ls.jump(-1) end, { silent = true })
+
 -- User commands
 
 -- Create the user command :CaptureOutput {cmd}
 --
 -- This takes the output of the command and puts it in a scratch buffer instead of the internal pager.
 vim.api.nvim_create_user_command("CaptureOutput", function(opts)
-    fn.capture_output(opts.args)
+	fn.capture_output(opts.args)
 end, {
-    nargs = "+",         -- Require at least one arg (the command)
-    complete = "command" -- Allow tab-completion of commands
+	nargs = "+",     -- Require at least one arg (the command)
+	complete = "command" -- Allow tab-completion of commands
 })
