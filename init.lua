@@ -2,9 +2,9 @@
 
 -- TODO:
 -- - Force quit programs running in toggleterm
--- - <C-j> and <C-k> bindings
--- - Lua snippet configuration / autocomplete
+-- - Make tab completion in ex mode behave like bash
 -- - Setup Oil
+-- - Setup a git plugin to do all the git stuff
 
 require('plugins');
 require('settings');

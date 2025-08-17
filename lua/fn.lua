@@ -8,6 +8,7 @@ function M.reload_config()
     package.loaded.settings = nil;
     package.loaded.bindings = nil;
     package.loaded.auto_commands = nil;
+    package.loaded.fn = nil;
     dofile(vim.fn.stdpath("config") .. "/init.lua")
 end
 
@@ -30,8 +31,55 @@ function M.capture_output(cmd)
     vim.wo.number = false
 end
 
+--- Filter avaliable code actions based on the kind provided and apply it if it gets filtered down to one.
+---
+--- Some helpful examples for "kind" are "add_impl_missing_members"
+---
+--- @param kind string Should match the title here: https://rust-analyzer.github.io/book/assists.html
+local function rust_apply_quickfix(kind)
+    vim.lsp.buf.code_action({
+        filter = function(action)
+            return action.data and action.data.id and string.match(action.data.id, kind)
+        end,
+        apply = true, -- automatically apply the action if only one remains
+    })
+end
+
+-- Helper function to display code actions
+local function display_code_action_details()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local params = vim.lsp.util.make_range_params(0, "utf-8")
+    params.context = {
+        triggerKind = vim.lsp.protocol.CodeActionTriggerKind.Invoked,
+        diagnostics = vim.lsp.diagnostic.get_line_diagnostics(),
+    }
+
+    vim.lsp.buf_request(bufnr, "textDocument/codeAction", params, function(err, actions, ctx, _)
+        if err then
+            vim.notify("Code action error: " .. err.message, vim.log.levels.ERROR)
+            return
+        end
+        if not actions or vim.tbl_isempty(actions) then
+            vim.notify("No code actions")
+            return
+        end
+        for _, action in pairs(actions) do
+            if action.data then
+                print("it is a data kind")
+            end
+            if action.edit then
+                print("it is a edit kind")
+            end
+            print("kind : " .. action.kind)
+            print("title : " .. action.title)
+            -- print(vim.inspect(action))
+        end
+    end)
+end
+
 function M.debug_function()
-    print("You found my debug function! Nothing do see here")
+    print("You found my debug function!")
+    display_code_action_details();
 end
 
 --- Get the command to run for an arbitrary file open in the current buffer
