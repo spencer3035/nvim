@@ -51,7 +51,7 @@ return {
         {
             -- Regex to capture an isolated 'p' preceeded by whitespace, we will replace 'p', but
             -- not the whitespace with a print statement
-            trig = "^(%s*)pp ",
+            trig = "^(%s*)p ",
             regTrig = true,
             wordTrig = false,
             snippetType = "autosnippet"
