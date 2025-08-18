@@ -112,6 +112,8 @@ local function get_project_command(isTest)
         end
     end
 
+    local isJava = ft == "java"
+
     -- Could be nil
     local git_dir = vim.fs.root(0, '.git')
     -- Traverse files around the git dir to get hints on what to run
@@ -122,6 +124,14 @@ local function get_project_command(isTest)
             return nil
         end
         for entry in vim.fs.dir(git_dir) do
+            if (entry == "settings.gradle" or entry == "gradle.properties") and isJava then
+                if isTest then
+                    return "gradle build"
+                else
+                    return "gradle run"
+                end
+            end
+
             if entry == "Cargo.toml" then
                 if isTest then
                     return "cargo test"

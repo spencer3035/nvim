@@ -5,6 +5,7 @@ vim.pack.add({
     -- BEGIN EXPERIMENTAL PLUGINS
     { src = 'https://github.com/mluders/comfy-line-numbers.nvim' },
     { src = 'https://github.com/akinsho/toggleterm.nvim' },
+    { src = 'https://github.com/mfussenegger/nvim-jdtls' },
     -- END EXPERIMENTAL PLUGINS
     -- For the Pick function
     { src = 'https://github.com/echasnovski/mini.pick' },
@@ -75,5 +76,6 @@ require("mini.pick").setup()
 vim.lsp.enable({
     "lua_ls",
     "rust_analyzer",
-    "rnix"
+    "rnix",
+    "slint-lsp",
 })
