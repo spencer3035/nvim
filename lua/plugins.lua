@@ -74,6 +74,7 @@ require("mini.pick").setup()
 -- Note that their configs are in nvim/lsp/*
 -- Go there if you want to make changes to them
 vim.lsp.enable({
+    "jsonls",
     "lua_ls",
     "rust_analyzer",
     "rnix",

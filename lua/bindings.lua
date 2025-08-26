@@ -22,7 +22,7 @@ vim.keymap.set('n', '<leader>sg', ':Pick grep<CR>')
 -- LSP functions
 vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format)
 vim.keymap.set('n', '<leader>ld', vim.lsp.buf.definition)
-vim.keymap.set('n', '<leader>la', vim.lsp.buf.code_action)
+vim.keymap.set({ 'n', 'v', 'x' }, '<leader>la', vim.lsp.buf.code_action)
 
 vim.keymap.set({ 'n', 'v', 'x' }, '<leader>y', [["+y]], { noremap = true, silent = true })
 vim.keymap.set({ 'n', 'v', 'x' }, '<leader>p', [["+p]], { noremap = true, silent = true })

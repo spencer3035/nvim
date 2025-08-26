@@ -117,4 +117,11 @@ return {
             reload_workspace(bufnr)
         end, { desc = 'Reload current cargo workspace' })
     end,
+    settings = {
+        ["rust-analyzer"] = {
+            check = {
+                command = "clippy"
+            }
+        }
+    }
 }
