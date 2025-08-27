@@ -11,7 +11,7 @@ end)
 vim.keymap.set('n', '<leader>c', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua | tcd %:p:h<CR>')
 -- Quicker way to quit
 vim.keymap.set('n', '<leader>q', ':q')
-
+vim.keymap.set('i', '<C-j>', "<C-x><C-o>");
 
 -- Search
 -- Search files
@@ -42,11 +42,11 @@ vim.cmd('digraphs f, ' .. vim.fn.char2nr("，"))
 vim.cmd('digraphs f: ' .. vim.fn.char2nr("："))
 vim.cmd('digraphs f? ' .. vim.fn.char2nr("？"))
 
-local ls = require('luasnip');
-vim.keymap.set('i', "<C-l>", function() ls.expand() end, { silent = true })
-vim.keymap.set('i', "<C-j>", function() ls.jump(1) end, { silent = true })
+-- local ls = require('luasnip');
+-- vim.keymap.set('i', "<C-l>", function() ls.expand() end, { silent = true })
+-- vim.keymap.set('i', "<C-j>", function() ls.jump(1) end, { silent = true })
 -- TODO: This doesn't seem to work
-vim.keymap.set('i', "<C-k>", function() ls.jump(-1) end, { silent = true })
+-- vim.keymap.set('i', "<C-k>", function() ls.jump(-1) end, { silent = true })
 
 -- User commands
 
