@@ -10,7 +10,7 @@ end)
 -- Edit init.lua (config edit)
 vim.keymap.set('n', '<leader>c', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua | tcd %:p:h<CR>')
 -- Quicker way to quit
-vim.keymap.set('n', '<leader>q', ':q')
+vim.keymap.set('n', '<leader>q', ':q<CR>')
 vim.keymap.set('i', '<C-j>', "<C-x><C-o>");
 
 -- Search
