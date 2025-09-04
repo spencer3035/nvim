@@ -32,7 +32,7 @@ vim.keymap.set('i', '(<CR>', '(<CR>)<ESC>O');
 
 vim.keymap.set('n', '<leader>tl', fn.TermTest)
 vim.keymap.set('n', '<leader>tk', fn.TermRun)
-vim.keymap.set('n', '<leader>tj', ':ToggleTerm<CR>')
+vim.keymap.set('n', '<leader>tj', ':ToggleTerm direction=vertical<CR>')
 
 -- Make <Esc> return to normal mode when in terminal mode
 vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
