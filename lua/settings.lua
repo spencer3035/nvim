@@ -14,6 +14,8 @@ vim.opt.expandtab = true;
 
 -- Visuals
 
+-- Tab complete behavior more similar to bash
+vim.opt.wildmode = 'longest:full'
 vim.opt.winborder = "rounded"
 -- see :h vim.diagnostic.Opts
 vim.diagnostic.config({ virtual_text = true, });

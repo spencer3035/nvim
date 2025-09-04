@@ -28,3 +28,15 @@ vim.api.nvim_create_autocmd("BufReadPost", {
         end
     end,
 })
+
+-- Don't set the format expressions so that gq motions can format comments
+vim.api.nvim_create_autocmd(
+    "FileType",
+    {
+        pattern = "*",
+        callback = function()
+            vim.bo.formatexpr = " "
+            vim.bo.formatprg = " "
+        end
+    }
+)
