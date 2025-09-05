@@ -32,13 +32,18 @@
 
 -- Snippets for rust
 return {
-    -- Expand "if" to full if statement
-    s("if",
-        fmt(
+    -- Expand ";if" to full if statement
+    s(
+        {
+            trig = ";if",
+            wordTrig = true,
+            snippetType = "autosnippet"
+        },
+        fmta(
             [[
-            if {cond} {{
-                {stop};
-            }}
+            if <cond> {
+                <stop>;
+            }
             ]],
             {
                 cond = i(1),
@@ -46,24 +51,18 @@ return {
             }
         )
     ),
-    -- Expand "p" to "println!("");"
+    -- Expand ";r" to "println!("");"
     s(
         {
-            -- Regex to capture an isolated 'p' preceeded by whitespace, we will replace 'p', but
-            -- not the whitespace with a print statement
-            trig = "^(%s*)p ",
-            regTrig = true,
-            wordTrig = false,
+            trig = ";r",
+            wordTrig = true,
             snippetType = "autosnippet"
         },
         {
-            -- Return the indented part
-            f(function(_, snip)
-                return snip.captures[1]
-            end),
             t("println!(\""),
-            i(0),
+            i(1),
             t("\");"),
+            i(0)
         }
     ),
 }
