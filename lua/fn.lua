@@ -112,8 +112,6 @@ local function get_project_command(isTest)
         end
     end
 
-    local isJava = ft == "java"
-
     -- Could be nil
     local git_dir = vim.fs.root(0, '.git')
     -- Traverse files around the git dir to get hints on what to run
@@ -124,7 +122,7 @@ local function get_project_command(isTest)
             return nil
         end
         for entry in vim.fs.dir(git_dir) do
-            if (entry == "settings.gradle" or entry == "gradle.properties") and isJava then
+            if (entry == "settings.gradle" or entry == "gradle.properties" or entry == "build.gradle") then
                 if isTest then
                     return "gradle build"
                 else
@@ -148,11 +146,18 @@ local function get_project_command(isTest)
             end
         end
     end
+
+    -- Fallback java commands
+    if ft == "java" then
+        -- TODO: javac && java
+        return nil
+    end
+
     return nil
 end
 
 local function run_new_terminal_command(cmd)
-    vim.cmd("TermExec direction=vertical cmd=clear")
+    vim.cmd("TermExec direction=vertical cmd=reset")
     vim.cmd("TermExec direction=vertical cmd=\"" .. cmd .. "\"")
 end
 
