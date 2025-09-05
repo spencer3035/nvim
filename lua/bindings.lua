@@ -17,22 +17,16 @@ vim.keymap.set('i', "<C-e>", function()
     end
 end, { silent = true, expr = true })
 vim.keymap.set('i', "<C-p>", function()
-    local snip = ls.get_active_snip()
-    if snip ~= nil then
-        if ls.choice_active() then
-            ls.change_choice(-1)
-        end
+    if ls.choice_active() then
+        ls.change_choice(-1)
     else
         -- We have to do this nonsense to fallback to default behavior
         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-p>', true, false, true), 'n', false)
     end
 end, { silent = true })
 vim.keymap.set('i', "<C-n>", function()
-    local snip = ls.get_active_snip()
-    if snip ~= nil then
-        if ls.choice_active() then
-            ls.change_choice(1)
-        end
+    if ls.choice_active() then
+        ls.change_choice(1)
     else
         -- We have to do this nonsense to fallback to default behavior
         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, false, true), 'n', false)
