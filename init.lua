@@ -2,7 +2,6 @@
 
 -- TODO:
 -- - Force quit programs running in toggleterm
--- - Setup Oil
 -- - Setup a git plugin to do all the git stuff
 
 require('plugins');

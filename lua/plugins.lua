@@ -3,10 +3,11 @@
 
 vim.pack.add({
     -- BEGIN EXPERIMENTAL PLUGINS
-    { src = 'https://github.com/mluders/comfy-line-numbers.nvim' },
     { src = 'https://github.com/akinsho/toggleterm.nvim' },
     { src = 'https://github.com/mfussenegger/nvim-jdtls' },
     -- END EXPERIMENTAL PLUGINS
+    -- File manager that doesn't suck (netrw)
+    { src = 'https://github.com/stevearc/oil.nvim' },
     -- For the Pick function
     { src = 'https://github.com/echasnovski/mini.pick' },
     -- For installing LSP servers automatically
@@ -20,8 +21,21 @@ vim.pack.add({
     { src = "https://github.com/L3MON4D3/LuaSnip" },
 })
 
-require('luasnip').setup({ enable_autosnippets = true });
-require('luasnip.loaders.from_lua').load({ paths = "~/.config/nvim/snippets" });
+require("oil").setup({
+    keymaps = {
+        ["<C-p>"] = { "actions.preview", opts = { split = "botright" } }
+    },
+    skip_confirm_for_simple_edits = true,
+    natural_order = true,
+    float = {
+        preview_split = "right",
+    },
+    preview_win = {
+        preview_split = "right",
+    }
+})
+require('luasnip').setup({ enable_autosnippets = true })
+require('luasnip.loaders.from_lua').load({ paths = "~/.config/nvim/snippets" })
 
 require("toggleterm").setup({
     size = function(term)
