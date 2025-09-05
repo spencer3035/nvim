@@ -68,7 +68,11 @@ vim.keymap.set('n', '<leader>tj', ':ToggleTerm direction=vertical<CR>')
 -- Make <Esc> return to normal mode when in terminal mode
 vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
 
--- digraphs
+-- VISUAL MODE
+-- Has the effect of putting highlighted section in a block on the next line ({...})
+vim.keymap.set('v', '<leader>{', 'c{<CR>}<ESC>O<C-r>"<ESC>O')
+
+-- DIGRAPHS
 vim.cmd('digraphs f, ' .. vim.fn.char2nr("，"))
 vim.cmd('digraphs f: ' .. vim.fn.char2nr("："))
 vim.cmd('digraphs f? ' .. vim.fn.char2nr("？"))
