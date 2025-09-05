@@ -58,11 +58,14 @@ return {
             wordTrig = true,
             snippetType = "autosnippet"
         },
-        {
-            t("println!(\""),
-            i(1),
-            t("\");"),
-            i(0)
-        }
+        fmta(
+            [[
+                println!("<string>");<stop>
+            ]],
+            {
+                string = i(1),
+                stop = i(0),
+            }
+        )
     ),
 }

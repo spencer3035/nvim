@@ -2,10 +2,27 @@
 
 -- Snippets for lua
 return {
+    -- Expand ";r" to print
+    s(
+        {
+            trig = ";r",
+            wordTrig = true,
+            snippetType = "autosnippet"
+        },
+        fmta(
+            [[
+            print("<string>");<stop>
+            ]],
+            {
+                string = i(1),
+                stop = i(0),
+            }
+        )
+    ),
     -- Expand to "if ... then ... end"
     s(
         {
-            trig = ";if ",
+            trig = ";if",
             wordTrig = true,
             snippetType = "autosnippet"
         },
@@ -25,7 +42,7 @@ return {
     ),
     s(
         {
-            trig = ";ie ",
+            trig = ";ie",
             -- wordTrig = true,
             snippetType = "autosnippet"
         },

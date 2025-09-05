@@ -3,12 +3,12 @@ local fn = require('fn')
 -- INSERT MODE
 vim.keymap.set('i', '{<CR>', '{<CR>}<ESC>O');
 vim.keymap.set('i', '(<CR>', '(<CR>)<ESC>O');
+vim.keymap.set('i', '<C-j>', "<C-x><C-o>");
 
 local ls = require('luasnip');
 vim.keymap.set('i', "<C-h>", function() ls.jump(-1) end, { silent = true })
 vim.keymap.set('i', "<C-l>", function() ls.jump(1) end, { silent = true })
 vim.keymap.set('i', "<C-e>", function()
-    vim.cmd('echo "hello"')
     local snip = ls.get_active_snip()
     if snip ~= nil then
         ls.unlink_current()
@@ -16,6 +16,28 @@ vim.keymap.set('i', "<C-e>", function()
         return '<C-e>'
     end
 end, { silent = true, expr = true })
+vim.keymap.set('i', "<C-p>", function()
+    local snip = ls.get_active_snip()
+    if snip ~= nil then
+        if ls.choice_active() then
+            ls.change_choice(-1)
+        end
+    else
+        -- We have to do this nonsense to fallback to default behavior
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-p>', true, false, true), 'n', false)
+    end
+end, { silent = true })
+vim.keymap.set('i', "<C-n>", function()
+    local snip = ls.get_active_snip()
+    if snip ~= nil then
+        if ls.choice_active() then
+            ls.change_choice(1)
+        end
+    else
+        -- We have to do this nonsense to fallback to default behavior
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, false, true), 'n', false)
+    end
+end, { silent = true })
 
 -- NORMAL MODE
 
