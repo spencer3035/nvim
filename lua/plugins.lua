@@ -3,9 +3,11 @@
 
 vim.pack.add({
     -- BEGIN EXPERIMENTAL PLUGINS
-    { src = 'https://github.com/akinsho/toggleterm.nvim' },
     { src = 'https://github.com/mfussenegger/nvim-jdtls' },
+    { src = 'https://github.com/NeogitOrg/neogit' },
     -- END EXPERIMENTAL PLUGINS
+    -- Plugin to handle terminals
+    { src = 'https://github.com/akinsho/toggleterm.nvim' },
     -- File manager that doesn't suck (netrw)
     { src = 'https://github.com/stevearc/oil.nvim' },
     -- For the Pick function
@@ -13,11 +15,12 @@ vim.pack.add({
     -- For installing LSP servers automatically
     { src = 'https://github.com/mason-org/mason.nvim' },
     -- For automatic LSP configuration
-    -- { src = 'https://github.com/neovim/nvim-lspconfig' },
+    { src = 'https://github.com/neovim/nvim-lspconfig' },
     -- For better syntax highlighting
     { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
     -- Colorscheme
     { src = "https://github.com/folke/tokyonight.nvim" },
+    -- Snippet engine
     { src = "https://github.com/L3MON4D3/LuaSnip" },
 })
 
