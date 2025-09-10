@@ -1,14 +1,19 @@
 local fn = require('fn')
+local set = vim.keymap.set;
+local opts = { noremap = true, silent = true }
 
--- INSERT MODE
-vim.keymap.set('i', '{<CR>', '{<CR>}<ESC>O');
-vim.keymap.set('i', '(<CR>', '(<CR>)<ESC>O');
-vim.keymap.set('i', '<C-j>', "<C-x><C-o>");
+--------------------------------------------
+------------- INSERT MODE ------------------
+--------------------------------------------
+
+set('i', '{<CR>', '{<CR>}<ESC>O');
+set('i', '(<CR>', '(<CR>)<ESC>O');
+set('i', '<C-j>', "<C-x><C-o>");
 
 local ls = require('luasnip');
-vim.keymap.set('i', "<C-h>", function() ls.jump(-1) end, { silent = true })
-vim.keymap.set('i', "<C-l>", function() ls.jump(1) end, { silent = true })
-vim.keymap.set('i', "<C-e>", function()
+set('i', "<C-h>", function() ls.jump(-1) end, opts)
+set('i', "<C-l>", function() ls.jump(1) end, opts)
+set('i', "<C-e>", function()
     local snip = ls.get_active_snip()
     if snip ~= nil then
         ls.unlink_current()
@@ -16,74 +21,92 @@ vim.keymap.set('i', "<C-e>", function()
         return '<C-e>'
     end
 end, { silent = true, expr = true })
-vim.keymap.set('i', "<C-p>", function()
+set('i', "<C-p>", function()
     if ls.choice_active() then
         ls.change_choice(-1)
     else
         -- We have to do this nonsense to fallback to default behavior
         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-p>', true, false, true), 'n', false)
     end
-end, { silent = true })
-vim.keymap.set('i', "<C-n>", function()
+end, opts)
+set('i', "<C-n>", function()
     if ls.choice_active() then
         ls.change_choice(1)
     else
         -- We have to do this nonsense to fallback to default behavior
         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, false, true), 'n', false)
     end
-end, { silent = true })
+end, opts)
 
--- NORMAL MODE
+--------------------------------------------
+------------- NORMAL MODE ------------------
+--------------------------------------------
+-- git commands
+set('n', '<leader>g', ':Neogit<CR>', opts)
 
 -- source init.lua
-vim.keymap.set('n', '<leader>s', fn.reload_config)
+set('n', '<leader>s', fn.reload_config, opts)
 -- debug function
-vim.keymap.set('n', '<leader><leader>s', function()
+set('n', '<leader><leader>s', function()
     fn.reload_config()
     fn.debug_function()
-end)
+end, opts)
 -- Edit init.lua (config edit)
-vim.keymap.set('n', '<leader>c', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua | tcd %:p:h<CR>')
+set('n', '<leader>c', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua | tcd %:p:h<CR>', opts)
 -- Quicker way to quit
-vim.keymap.set('n', '<leader>q', ':q<CR>')
+set('n', '<leader>q', ':q<CR>', opts)
 
 -- Search
 -- Search files
-vim.keymap.set('n', '<leader>sf', ':Pick files<CR>')
+set('n', '<leader>sf', ':Pick files<CR>', opts)
 -- Search by grep
-vim.keymap.set('n', '<leader>sg', ':Pick grep<CR>')
+set('n', '<leader>sg', ':Pick grep<CR>', opts)
 
 -- LSP functions
-vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format)
-vim.keymap.set('n', '<leader>ld', vim.lsp.buf.definition)
-vim.keymap.set({ 'n', 'v', 'x' }, '<leader>la', vim.lsp.buf.code_action)
+set('n', '<leader>lf', vim.lsp.buf.format, opts)
+set('n', '<leader>ld', vim.lsp.buf.definition, opts)
+set({ 'n', 'v', 'x' }, '<leader>la', vim.lsp.buf.code_action, opts)
 
-vim.keymap.set({ 'n', 'v', 'x' }, '<leader>y', [["+y]], { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'v', 'x' }, '<leader>p', [["+p]], { noremap = true, silent = true })
+set({ 'n', 'v', 'x' }, '<leader>y', [["+y]], opts)
+set({ 'n', 'v', 'x' }, '<leader>p', [["+p]], opts)
 
-vim.keymap.set('n', '<leader>tl', fn.TermTest)
-vim.keymap.set('n', '<leader>tk', fn.TermRun)
-vim.keymap.set('n', '<leader>tj', ':ToggleTerm direction=vertical<CR>')
+set('n', '<leader>tl', fn.TermTest, opts)
+set('n', '<leader>tk', fn.TermRun, opts)
+set('n', '<leader>tj', ':ToggleTerm direction=vertical<CR>', opts)
+
+--------------------------------------------
+------------ TERMINAL MODE -----------------
+--------------------------------------------
 
 -- Make <Esc> return to normal mode when in terminal mode
-vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
+set('t', '<Esc>', '<C-\\><C-n>')
 
--- VISUAL MODE
+--------------------------------------------
+------------- VISUAL MODE ------------------
+--------------------------------------------
+
 -- Has the effect of putting highlighted section in a block on the next line ({...})
-vim.keymap.set('v', '<leader>{', 'c{<CR>}<ESC>O<C-r>"<ESC>O')
+set('v', '<leader>{', 'c{<CR>}<ESC>O<C-r>"<ESC>O', opts)
 
--- DIGRAPHS
+--------------------------------------------
+--------------- DIGRAPHS -------------------
+--------------------------------------------
+-- fullwidth comma
 vim.cmd('digraphs f, ' .. vim.fn.char2nr("，"))
+-- fullwidth colon
 vim.cmd('digraphs f: ' .. vim.fn.char2nr("："))
+-- fullwidth question mark
 vim.cmd('digraphs f? ' .. vim.fn.char2nr("？"))
 
--- User commands
+--------------------------------------------
+------------- USER COMMANDS ----------------
+--------------------------------------------
 
 -- Create the user command :CaptureOutput {cmd}
 --
 -- This takes the output of the command and puts it in a scratch buffer instead of the internal pager.
-vim.api.nvim_create_user_command("CaptureOutput", function(opts)
-    fn.capture_output(opts.args)
+vim.api.nvim_create_user_command("CaptureOutput", function(opt)
+    fn.capture_output(opt.args)
 end, {
     nargs = "+",         -- Require at least one arg (the command)
     complete = "command" -- Allow tab-completion of commands

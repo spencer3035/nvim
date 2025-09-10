@@ -6,7 +6,7 @@ vim.pack.add({
     { src = 'https://github.com/mfussenegger/nvim-jdtls' },
     { src = 'https://github.com/NeogitOrg/neogit' },
     { src = 'https://github.com/nvim-lua/plenary.nvim' },  -- Dependency of neogit
-    { src = 'https://github.com/sindrets/diffview.nvim' }, -- Diff integration (dependency of neogit
+    { src = 'https://github.com/sindrets/diffview.nvim' }, -- Diff integration (dependency of neogit)
     -- END EXPERIMENTAL PLUGINS
     -- Plugin to handle terminals
     { src = 'https://github.com/akinsho/toggleterm.nvim' },
