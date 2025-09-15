@@ -82,6 +82,16 @@ function M.debug_function()
     display_code_action_details();
 end
 
+local function special_project_commands(root_dir, isTest)
+    if root_dir == vim.fn.expand('~/dev/spenceros') then
+        if isTest then
+            return 'make test'
+        else
+            return 'make run'
+        end
+    end
+end
+
 --- Get the command to run for an arbitrary file open in the current buffer
 --- @param isTest boolean If should return test command or run command
 --- @return string? Command to run or nil if couldn't be determined
@@ -90,32 +100,14 @@ local function get_project_command(isTest)
     -- Full file name
     local file_name = vim.fn.expand('%:p');
     local base_name = vim.fs.basename(file_name);
-    if base_name == "Cargo.toml" then
-        if isTest then
-            return "cargo test"
-        else
-            return "cargo run"
-        end
-    end
-    if base_name == "Makefile" then
-        if isTest then
-            return "make test"
-        else
-            return "make run"
-        end
-    end
-    if ft == "rust" then
-        if isTest then
-            return "cargo test"
-        else
-            return "cargo run"
-        end
-    end
-
     -- Could be nil
     local git_dir = vim.fs.root(0, '.git')
     -- Traverse files around the git dir to get hints on what to run
     if git_dir then
+        local special_command = special_project_commands(git_dir, isTest);
+        if special_command ~= nil then
+            return special_command
+        end
         local base_dir_name = vim.fs.basename(git_dir)
         if base_dir_name == "nvim" then
             M.debug_function()
@@ -129,14 +121,6 @@ local function get_project_command(isTest)
                     return "gradle run"
                 end
             end
-
-            if entry == "Cargo.toml" then
-                if isTest then
-                    return "cargo test"
-                else
-                    return "cargo run"
-                end
-            end
             if entry == "Makefile" then
                 if isTest then
                     return "make test"
@@ -144,6 +128,29 @@ local function get_project_command(isTest)
                     return "make run"
                 end
             end
+            if entry == "Cargo.toml" then
+                if isTest then
+                    return "cargo test"
+                else
+                    return "cargo run"
+                end
+            end
+        end
+    end
+
+    if base_name == "Makefile" then
+        if isTest then
+            return "make test"
+        else
+            return "make run"
+        end
+    end
+
+    if base_name == "Cargo.toml" or ft == "rust" then
+        if isTest then
+            return "cargo test"
+        else
+            return "cargo run"
         end
     end
 
