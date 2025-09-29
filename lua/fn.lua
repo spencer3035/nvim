@@ -154,6 +154,14 @@ local function get_project_command(isTest)
         end
     end
 
+    if ft == "python" then
+        if isTest then
+            return nil
+        else
+            return "python " .. file_name
+        end
+    end
+
     -- Fallback java commands
     if ft == "java" then
         -- TODO: javac && java

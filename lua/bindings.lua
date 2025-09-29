@@ -66,6 +66,7 @@ set('n', '<leader>sg', ':Pick grep<CR>', opts)
 set('n', '<leader>lf', vim.lsp.buf.format, opts)
 set('n', '<leader>ld', vim.lsp.buf.definition, opts)
 set({ 'n', 'v', 'x' }, '<leader>la', vim.lsp.buf.code_action, opts)
+set('n', '<leader>lr', vim.lsp.buf.references, opts)
 
 set({ 'n', 'v', 'x' }, '<leader>y', [["+y]], opts)
 set({ 'n', 'v', 'x' }, '<leader>p', [["+p]], opts)
