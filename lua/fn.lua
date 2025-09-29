@@ -102,72 +102,89 @@ local function get_project_command(isTest)
     local base_name = vim.fs.basename(file_name);
     -- Could be nil
     local git_dir = vim.fs.root(0, '.git')
-    -- Traverse files around the git dir to get hints on what to run
-    if git_dir then
-        local special_command = special_project_commands(git_dir, isTest);
-        if special_command ~= nil then
-            return special_command
-        end
-        local base_dir_name = vim.fs.basename(git_dir)
-        if base_dir_name == "nvim" then
-            M.debug_function()
-            return nil
-        end
-        for entry in vim.fs.dir(git_dir) do
-            if (entry == "settings.gradle" or entry == "gradle.properties" or entry == "build.gradle") then
+
+    -- List of rules. First match is taken, so more specific rules should be earlier
+    local command_rules = {
+        {
+            repo_path = '~/dev/spenceros',
+            test_cmd = 'make test',
+            run_cmd = 'make run',
+        },
+        {
+            repo_path = '~/.config/nvim',
+            test_cmd = 'make test',
+            run_cmd = 'make run',
+        },
+        {
+            root_files = { "settings.gradle", "gradle.properties", "build.gradle" },
+            test_cmd = 'gradle test -i',
+            run_cmd = 'gradle run',
+        },
+        {
+            root_files = { 'Makefile' },
+            test_cmd = 'make test',
+            run_cmd = 'make run',
+        },
+        {
+            root_files = { 'Cargo.toml', 'Cargo.lock' },
+            test_cmd = 'cargo test',
+            run_cmd = 'cargo run',
+        },
+        {
+            file_type = 'Makefile',
+            test_cmd = 'make test',
+            run_cmd = 'make run',
+        },
+        {
+            file_type = 'rust',
+            test_cmd = 'cargo test',
+            run_cmd = 'cargo run',
+        },
+        {
+            file_type = 'python',
+            test_cmd = nil,
+            run_cmd = "python " .. file_name,
+        },
+    }
+
+    for _, entry in ipairs(command_rules) do
+        if git_dir ~= nil then
+            -- Check for repo path rules
+            if entry.repo_path ~= nil and git_dir == entry.repo_path then
                 if isTest then
-                    return "gradle build"
+                    return entry.test_cmd
                 else
-                    return "gradle run"
+                    return entry.run_cmd
                 end
             end
-            if entry == "Makefile" then
-                if isTest then
-                    return "make test"
-                else
-                    return "make run"
+
+            -- Check for root file rules
+            if entry.root_files ~= nil then
+                for _, file in ipairs(entry.root_files) do
+                    for root_file in vim.fs.dir(git_dir) do
+                        if file == root_file then
+                            if isTest then
+                                return entry.test_cmd
+                            else
+                                return entry.run_cmd
+                            end
+                        end
+                    end
                 end
             end
-            if entry == "Cargo.toml" then
-                if isTest then
-                    return "cargo test"
-                else
-                    return "cargo run"
-                end
+        end
+
+        -- Check for filetype rules
+        if entry.file_type ~= nil and ft == entry.file_type then
+            if isTest then
+                return entry.test_cmd
+            else
+                return entry.run_cmd
             end
         end
     end
 
-    if base_name == "Makefile" then
-        if isTest then
-            return "make test"
-        else
-            return "make run"
-        end
-    end
-
-    if base_name == "Cargo.toml" or ft == "rust" then
-        if isTest then
-            return "cargo test"
-        else
-            return "cargo run"
-        end
-    end
-
-    if ft == "python" then
-        if isTest then
-            return nil
-        else
-            return "python " .. file_name
-        end
-    end
-
-    -- Fallback java commands
-    if ft == "java" then
-        -- TODO: javac && java
-        return nil
-    end
-
+    -- Nothing matched
     return nil
 end
 
