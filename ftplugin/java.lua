@@ -41,6 +41,13 @@ local jdtls_config = {
                 --     },
                 -- },
             },
+            format = {
+                profile = "GoogleStyle",
+                url = "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+                comments = {
+                    enabled = false
+                },
+            }
         },
     },
 }
