@@ -4,10 +4,18 @@
 vim.pack.add({
     -- BEGIN EXPERIMENTAL PLUGINS
     { src = 'https://github.com/mfussenegger/nvim-jdtls' },
+    {
+        src = 'https://github.com/Saghen/blink.cmp',
+        data = {
+            keymap = { preset = 'default' },
+            completion = { documentation = { auto_show = true } },
+        }
+    },
+    -- END EXPERIMENTAL PLUGINS
+    -- Neogit (git integration)
     { src = 'https://github.com/NeogitOrg/neogit' },
     { src = 'https://github.com/nvim-lua/plenary.nvim' },  -- Dependency of neogit
     { src = 'https://github.com/sindrets/diffview.nvim' }, -- Diff integration (dependency of neogit)
-    -- END EXPERIMENTAL PLUGINS
     -- Plugin to handle terminals
     { src = 'https://github.com/akinsho/toggleterm.nvim' },
     -- File manager that doesn't suck (netrw)
@@ -24,6 +32,10 @@ vim.pack.add({
     { src = "https://github.com/folke/tokyonight.nvim" },
     -- Snippet engine
     { src = "https://github.com/L3MON4D3/LuaSnip" },
+})
+
+require('blink.cmp').setup({
+    fuzzy = { implementation = "lua" }
 })
 
 require('neogit').setup({})

@@ -145,6 +145,11 @@ local function get_project_command(isTest)
             test_cmd = nil,
             run_cmd = "python " .. file_name,
         },
+        {
+            file_type = 'sh',
+            test_cmd = nil,
+            run_cmd = "./" .. base_name,
+        },
     }
 
     for _, entry in ipairs(command_rules) do
