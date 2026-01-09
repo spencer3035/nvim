@@ -45,7 +45,7 @@ end, opts)
 set('n', '<leader>g', ':Neogit<CR>', opts)
 
 -- source init.lua
-set('n', '<leader>s', fn.reload_config, opts)
+set('n', '<leader>o', fn.reload_config, opts)
 -- debug function
 set('n', '<leader><leader>s', function()
     fn.reload_config()
