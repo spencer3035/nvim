@@ -35,7 +35,21 @@ vim.pack.add({
 })
 
 require('blink.cmp').setup({
-    fuzzy = { implementation = "lua" }
+    cmdline = {
+        enabled = true,
+        keymap = { preset = 'cmdline' },
+        completion = { menu = { auto_show = true } },
+    },
+    completion = {
+        accept = { auto_brackets = { enabled = true }, },
+        menu = { auto_show = true },
+        ghost_text = {
+            enabled = true,
+            show_with_menu = true,
+        },
+    },
+    fuzzy = { implementation = "lua" },
+    keymap = { preset = 'default' },
 })
 
 require('neogit').setup({})

@@ -54,7 +54,7 @@ end, opts)
 -- Edit init.lua (config edit)
 set('n', '<leader>c', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua | tcd %:p:h<CR>', opts)
 -- Quicker way to quit
-set('n', '<leader>q', ':q<CR>', opts)
+set('n', '<leader>q', ':tabclose<CR>', opts)
 
 -- Search
 -- Search files
@@ -63,7 +63,7 @@ set('n', '<leader>sf', ':Pick files<CR>', opts)
 set('n', '<leader>sg', ':Pick grep<CR>', opts)
 
 -- LSP functions
-set('n', '<leader>lf', vim.lsp.buf.format, opts)
+set({ 'n', 'v' }, '<leader>lf', vim.lsp.buf.format, opts)
 set('n', '<leader>ld', vim.lsp.buf.definition, opts)
 set({ 'n', 'v', 'x' }, '<leader>la', vim.lsp.buf.code_action, opts)
 set('n', '<leader>lr', vim.lsp.buf.references, opts)
