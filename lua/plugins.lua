@@ -4,13 +4,7 @@
 vim.pack.add({
     -- BEGIN EXPERIMENTAL PLUGINS
     { src = 'https://github.com/mfussenegger/nvim-jdtls' },
-    {
-        src = 'https://github.com/Saghen/blink.cmp',
-        data = {
-            keymap = { preset = 'default' },
-            completion = { documentation = { auto_show = true } },
-        }
-    },
+    { src = 'https://github.com/Saghen/blink.cmp' },
     -- END EXPERIMENTAL PLUGINS
     -- Neogit (git integration)
     { src = 'https://github.com/NeogitOrg/neogit' },
@@ -37,12 +31,16 @@ vim.pack.add({
 require('blink.cmp').setup({
     cmdline = {
         enabled = true,
-        keymap = { preset = 'cmdline' },
+        keymap = {
+            preset = 'cmdline',
+            ['<Tab>'] = { 'select_and_accept' },
+        },
         completion = { menu = { auto_show = true } },
     },
     completion = {
         accept = { auto_brackets = { enabled = true }, },
         menu = { auto_show = true },
+        completion = { documentation = { auto_show = true } },
         ghost_text = {
             enabled = true,
             show_with_menu = true,
