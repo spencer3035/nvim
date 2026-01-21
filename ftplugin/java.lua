@@ -47,6 +47,16 @@ local jdtls_config = {
                 comments = {
                     enabled = false
                 },
+            },
+            compile = {
+                nullAnalysis = {
+                    mode = 'automatic',
+                    -- nonnull = 'javax.annotationNonnull',
+                    -- nullable = 'javax.annotation.Nullable',
+                    nonnull = 'org.checkerframework.checker.nullness.qual.NonNull',
+                    nullable = 'org.checkerframework.checker.nullness.qual.Nullable',
+                    nonnullbydefault = '',
+                }
             }
         },
     },
