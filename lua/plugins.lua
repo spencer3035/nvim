@@ -5,6 +5,9 @@ vim.pack.add({
     -- BEGIN EXPERIMENTAL PLUGINS
     { src = 'https://github.com/mfussenegger/nvim-jdtls' },
     { src = 'https://github.com/Saghen/blink.cmp' },
+    { src = 'https://github.com/stevearc/conform.nvim' },
+    { src = 'https://github.com/coder/claudecode.nvim' },
+    { src = 'https://github.com/folke/snacks.nvim' }, -- dependency of claudecode
     -- END EXPERIMENTAL PLUGINS
     -- Neogit (git integration)
     { src = 'https://github.com/NeogitOrg/neogit' },
@@ -27,6 +30,38 @@ vim.pack.add({
     -- Snippet engine
     { src = "https://github.com/L3MON4D3/LuaSnip" },
 })
+
+-- require("claudecode").setup({
+--     auto_start = true,
+--     terminal = {
+--         split_side = "right",
+--     },
+--     git_repo_cwd = true,
+-- })
+-- vim.keymap.set("n", "<leader>ac", "<cmd>ClaudeCode<cr>")
+-- vim.keymap.set("n", "<leader>af", "<cmd>ClaudeCodeFocus<cr>")
+-- vim.keymap.set("n", "<leader>ar", "<cmd>ClaudeCode --resume<cr>")
+-- vim.keymap.set("n", "<leader>aC", "<cmd>ClaudeCode --continue<cr>")
+-- vim.keymap.set("n", "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>")
+-- vim.keymap.set("n", "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>")
+-- vim.keymap.set("n", "<leader>as", "<cmd>ClaudeCodeSend<cr>")
+-- -- Diff management
+-- vim.keymap.set("n", "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>")
+-- vim.keymap.set("n", "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>")
+
+require("conform").setup({
+    formatters_by_ft = {
+        lua = { "stylua" },
+        -- Conform will run multiple formatters sequentially
+        python = { "isort", "black" },
+        -- You can customize some of the format options for the filetype (:help conform.format)
+        rust = { "rustfmt", lsp_format = "fallback" },
+        -- Conform will run the first available formatter
+        javascript = { "prettierd", "prettier", stop_after_first = true },
+        java = { "spotless_maven" }
+    },
+})
+
 
 require('blink.cmp').setup({
     cmdline = {
@@ -124,4 +159,7 @@ vim.lsp.enable({
     "rust_analyzer",
     "rnix",
     "slint-lsp",
+    "gopls",
+    "yamlls",
+    "gitlab-ci-ls",
 })

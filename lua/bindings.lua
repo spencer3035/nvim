@@ -9,6 +9,7 @@ local opts = { noremap = true, silent = true }
 set('i', '{<CR>', '{<CR>}<ESC>O');
 set('i', '(<CR>', '(<CR>)<ESC>O');
 set('i', '<C-j>', "<C-x><C-o>");
+set('i', 'kj', '<Esc>', { silent = true, desc = "Exit insert mode" })
 
 local ls = require('luasnip');
 set('i', "<C-h>", function() ls.jump(-1) end, opts)
@@ -48,8 +49,9 @@ set('n', '<leader>g', ':Neogit<CR>', opts)
 set('n', '<leader>o', fn.reload_config, opts)
 -- debug function
 set('n', '<leader><leader>s', function()
-    fn.reload_config()
-    fn.debug_function()
+    -- fn.reload_config()
+    -- fn.debug_function()
+    fn.capture_output("lua require(\"fn\").debug_function()")
 end, opts)
 -- Edit init.lua (config edit)
 set('n', '<leader>c', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua | tcd %:p:h<CR>', opts)
@@ -75,19 +77,48 @@ set('n', '<leader>tl', fn.TermTest, opts)
 set('n', '<leader>tk', fn.TermRun, opts)
 set('n', '<leader>tj', ':ToggleTerm direction=vertical<CR>', opts)
 
+set('n', '<leader>>', fn.swap_arg_forward, opts)
+set('n', '<leader><lt>', fn.swap_arg_back, opts)
+
+
 --------------------------------------------
 ------------ TERMINAL MODE -----------------
 --------------------------------------------
 
 -- Make <Esc> return to normal mode when in terminal mode
 set('t', '<Esc>', '<C-\\><C-n>')
+set('t', 'kj', '<C-\\><C-n>', { silent = true, desc = "Exit insert mode" })
 
 --------------------------------------------
 ------------- VISUAL MODE ------------------
 --------------------------------------------
 
 -- Has the effect of putting highlighted section in a block on the next line ({...})
-set('v', '<leader>{', 'c{<CR>}<ESC>O<C-r>"<ESC>O', opts)
+set('v', '<leader>{', 'c{<CR><C-r>"<CR>}<ESC>%', opts)
+
+-- Don't pass stuff that will mess with insert mode
+local function get_visual_surround_macro(start_str, end_str)
+    return
+    -- Exit visual, jump to end of selection, enter insert mode
+        '<ESC>`>a' ..
+        -- Enter string
+        end_str ..
+        -- Exit insert mode, jump to end of selection, enter insert mode
+        '<ESC>`<i' ..
+        -- Enter string
+        start_str ..
+        -- Enter normal mode, nav to end (assuming only one character was entered)
+        '<ESC>`>l'
+end
+-- surround with brackets
+set('v', '<leader>[', get_visual_surround_macro('[', ']'), opts)
+-- surround with parens
+set('v', '<leader>(', get_visual_surround_macro('(', ')'), opts)
+-- surround with "
+set('v', '<leader>"', get_visual_surround_macro('"', '"'), opts)
+-- surround with '
+set('v', '<leader>\'', get_visual_surround_macro('\'', '\''), opts)
+
 
 --------------------------------------------
 --------------- DIGRAPHS -------------------
@@ -111,4 +142,13 @@ vim.api.nvim_create_user_command("CaptureOutput", function(opt)
 end, {
     nargs = "+",         -- Require at least one arg (the command)
     complete = "command" -- Allow tab-completion of commands
+})
+
+-- Create the user command :CaptureOutput {cmd}
+--
+-- This takes the output of the command and puts it in a scratch buffer instead of the internal pager.
+vim.api.nvim_create_user_command("Debug", function()
+end, {
+    nargs = 0, -- Require at least one arg (the command)
+    -- complete = "command" -- Allow tab-completion of commands
 })

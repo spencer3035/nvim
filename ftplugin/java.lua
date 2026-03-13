@@ -1,10 +1,23 @@
 local home = vim.fn.expand('~')
-local java_path = home .. '/.sdkman/candidates/java/21.0.6-amzn'
-local java17_path = home .. '~/.sdkman/candidates/java/17.0.12-amzn/'
+local java_path = home .. '/.sdkman/candidates/java/21.0.9-amzn'
+local java17_path = home .. '~/.sdkman/candidates/java/17.0.17-amzn/'
 local jdtls_path = home .. "/.local/share/nvim/mason/packages/jdtls"
 local maven_repo_path = home .. "/.m2/repository"
 local launcher_path = vim.fn.expand(jdtls_path .. '/plugins/org.eclipse.equinox.launcher_*.jar')
 local lombok_path = jdtls_path .. "/lombok.jar"
+
+
+-- Override LSP's default formatting for Java to use the Spotless formatter
+vim.lsp.handlers["textDocument/formatting"] = function(_, _, params, client_id, bufnr, config)
+    -- If the Java file, call our Spotless formatter
+    local filetype = vim.api.nvim_buf_get_option(bufnr, 'filetype')
+    if filetype == "java" then
+        FormatWithSpotless() -- Call the custom formatter instead
+        return nil       -- Prevent LSP from formatting
+    end
+    -- Default LSP formatting if not Java
+    vim.lsp.handlers["textDocument/formatting"](nil, nil, params, client_id, bufnr, config)
+end
 
 local jdtls_config = {
     cmd = {

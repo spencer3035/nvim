@@ -24,7 +24,17 @@ vim.diagnostic.config({ virtual_text = true, });
 vim.opt.number = true;
 vim.opt.relativenumber = true;
 
+
+-- Options for tabs
+vim.opt.tabclose = "uselast"
+
 -- NetRw config
 -- Needed to fix netrw, can be removed if I get my MR merged
 vim.g.netrw_keepdir = 0;
 vim.g.netrw_localcopydircmd = "cp -r"
+
+vim.filetype.add({
+    pattern = {
+        ['%.gitlab%-ci%.ya?ml'] = 'yaml.gitlab',
+    }
+})
