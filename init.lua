@@ -5,7 +5,8 @@
 --   Terminal:shutdown()? Not sure how to get the correct terminal instance
 -- - Setup a git plugin to do all the git stuff
 
-require('plugins');
 require('settings');
 require('bindings');
+require('plugins');
+require('lsp');
 require('auto_commands');

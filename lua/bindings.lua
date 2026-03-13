@@ -11,44 +11,18 @@ set('i', '(<CR>', '(<CR>)<ESC>O');
 set('i', '<C-j>', "<C-x><C-o>");
 set('i', 'kj', '<Esc>', { silent = true, desc = "Exit insert mode" })
 
-local ls = require('luasnip');
-set('i', "<C-h>", function() ls.jump(-1) end, opts)
-set('i', "<C-l>", function() ls.jump(1) end, opts)
-set('i', "<C-e>", function()
-    local snip = ls.get_active_snip()
-    if snip ~= nil then
-        ls.unlink_current()
-    else
-        return '<C-e>'
-    end
-end, { silent = true, expr = true })
-set('i', "<C-p>", function()
-    if ls.choice_active() then
-        ls.change_choice(-1)
-    else
-        -- We have to do this nonsense to fallback to default behavior
-        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-p>', true, false, true), 'n', false)
-    end
-end, opts)
-set('i', "<C-n>", function()
-    if ls.choice_active() then
-        ls.change_choice(1)
-    else
-        -- We have to do this nonsense to fallback to default behavior
-        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, false, true), 'n', false)
-    end
-end, opts)
-
 --------------------------------------------
 ------------- NORMAL MODE ------------------
 --------------------------------------------
--- git commands
-set('n', '<leader>g', ':Neogit<CR>', opts)
 
 -- source init.lua
 set('n', '<leader>o', fn.reload_config, opts)
--- debug function
-set('n', '<leader><leader>s', function()
+-- debug function don't captures
+set('n', '<leader>dd', function()
+    fn.debug_function()
+end, opts)
+-- debug function (capture output)
+set('n', '<leader>dc', function()
     -- fn.reload_config()
     -- fn.debug_function()
     fn.capture_output("lua require(\"fn\").debug_function()")
@@ -57,12 +31,6 @@ end, opts)
 set('n', '<leader>c', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua | tcd %:p:h<CR>', opts)
 -- Quicker way to quit
 set('n', '<leader>q', ':tabclose<CR>', opts)
-
--- Search
--- Search files
-set('n', '<leader>sf', ':Pick files<CR>', opts)
--- Search by grep
-set('n', '<leader>sg', ':Pick grep<CR>', opts)
 
 -- LSP functions
 set({ 'n', 'v' }, '<leader>lf', vim.lsp.buf.format, opts)
@@ -142,13 +110,4 @@ vim.api.nvim_create_user_command("CaptureOutput", function(opt)
 end, {
     nargs = "+",         -- Require at least one arg (the command)
     complete = "command" -- Allow tab-completion of commands
-})
-
--- Create the user command :CaptureOutput {cmd}
---
--- This takes the output of the command and puts it in a scratch buffer instead of the internal pager.
-vim.api.nvim_create_user_command("Debug", function()
-end, {
-    nargs = 0, -- Require at least one arg (the command)
-    -- complete = "command" -- Allow tab-completion of commands
 })
