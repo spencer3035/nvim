@@ -21,4 +21,19 @@ vim.lsp.enable({
     "gopls",
     "yamlls",
     "gitlab-ci-ls",
+    "bashls",
+    "pylsp",
+})
+
+vim.lsp.config('pylsp', {
+    settings = {
+        pylsp = {
+            plugins = {
+                pycodestyle = {
+                    ignore = { 'W391' },
+                    maxLineLength = 100
+                }
+            }
+        }
+    }
 })
