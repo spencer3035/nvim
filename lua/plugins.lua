@@ -1,7 +1,7 @@
 -- Installs plugins and configures them
 
 require("plugins/nvim-treesitter")
--- require("plugins/claudecode")
+require("plugins/claudecode")
 require("plugins/conform")
 require("plugins/blink")
 require("plugins/oil")

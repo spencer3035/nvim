@@ -1,6 +1,6 @@
 vim.pack.add({
     { src = 'https://github.com/coder/claudecode.nvim' },
-    { src = 'https://github.com/folke/snacks.nvim' }, -- dependency of claudecode
+    -- { src = 'https://github.com/folke/snacks.nvim' }, -- dependency of claudecode
 })
 require("claudecode").setup({
     auto_start = true,
@@ -15,7 +15,7 @@ vim.keymap.set("n", "<leader>ar", "<cmd>ClaudeCode --resume<cr>")
 vim.keymap.set("n", "<leader>aC", "<cmd>ClaudeCode --continue<cr>")
 vim.keymap.set("n", "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>")
 vim.keymap.set("n", "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>")
-vim.keymap.set("n", "<leader>as", "<cmd>ClaudeCodeSend<cr>")
+vim.keymap.set("v", "<leader>as", "<cmd>ClaudeCodeSend<cr>")
 -- Diff management
-vim.keymap.set("n", "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>")
-vim.keymap.set("n", "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>")
+vim.keymap.set("n", "<leader>ay", "<cmd>ClaudeCodeDiffAccept<cr>")
+vim.keymap.set("n", "<leader>an", "<cmd>ClaudeCodeDiffDeny<cr>")

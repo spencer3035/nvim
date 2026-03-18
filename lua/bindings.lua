@@ -48,6 +48,8 @@ set('n', '<leader>tj', ':ToggleTerm direction=vertical<CR>', opts)
 set('n', '<leader>>', fn.swap_arg_forward, opts)
 set('n', '<leader><lt>', fn.swap_arg_back, opts)
 
+-- Convert url to markdown link with text set to final path in url
+set('n', '<leader>ml', 'viWc[](<ESC>pa)<ESC>T/yt)F]PF[', opts)
 
 --------------------------------------------
 ------------ TERMINAL MODE -----------------
@@ -55,6 +57,8 @@ set('n', '<leader><lt>', fn.swap_arg_back, opts)
 
 -- Make <Esc> return to normal mode when in terminal mode
 set('t', '<Esc>', '<C-\\><C-n>')
+-- Map the default terminal escape sequence to send an escape character
+set('t', '<C-\\><C-n>', '<Esc>')
 set('t', 'kj', '<C-\\><C-n>', { silent = true, desc = "Exit insert mode" })
 
 --------------------------------------------
@@ -86,7 +90,6 @@ set('v', '<leader>(', get_visual_surround_macro('(', ')'), opts)
 set('v', '<leader>"', get_visual_surround_macro('"', '"'), opts)
 -- surround with '
 set('v', '<leader>\'', get_visual_surround_macro('\'', '\''), opts)
-
 
 --------------------------------------------
 --------------- DIGRAPHS -------------------
