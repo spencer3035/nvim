@@ -8,7 +8,6 @@ local opts = { noremap = true, silent = true }
 
 set('i', '{<CR>', '{<CR>}<ESC>O');
 set('i', '(<CR>', '(<CR>)<ESC>O');
-set('i', ';x', '<Esc>', { silent = true, desc = "Exit insert mode" })
 
 --------------------------------------------
 ------------- NORMAL MODE ------------------
