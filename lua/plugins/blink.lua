@@ -12,7 +12,6 @@ require('blink.cmp').setup({
     completion = {
         accept = { auto_brackets = { enabled = true }, },
         menu = { auto_show = true },
-        completion = { documentation = { auto_show = true } },
         ghost_text = {
             enabled = true,
             show_with_menu = true,
