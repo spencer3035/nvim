@@ -45,6 +45,17 @@ local function param_lines(args, parent, old_state, user_args)
     return sn(nil, nodes);
 end
 
+local function init_class()
+    local path = vim.fn.expand('%:p:h') -- Get full directory path
+    -- Try to extract path after 'java/' directory (common Java project structure)
+    local package = path:match('java/(.+)$')
+    if package then
+        return 'package ' .. package:gsub('/', '.')
+    end
+    -- Fallback if no java/ directory found
+    return 'package '
+end
+
 -- Snippets for java
 return {
     -- Expand ;fn to function with document comments
@@ -75,6 +86,31 @@ return {
                 }),
                 body = i(6),
                 doc = d(7, param_lines, { 2, 4, 5 }),
+                stop = i(0),
+            }
+        )
+    ),
+    -- Expand ;p to add the "package ...;" line at the beginning of files
+    s(
+        {
+            trig = ";i",
+            wordTrig = true,
+            snippetType = "autosnippet"
+        },
+        fmta(
+            [[
+            <package>;
+
+            public class <class> {
+                <stop>
+            }
+            ]],
+            {
+                package = f(init_class, {}),
+                class = f(function()
+                        return vim.fn.expand('%:t:r') -- Get filename without extension
+                    end,
+                    {}),
                 stop = i(0),
             }
         )
