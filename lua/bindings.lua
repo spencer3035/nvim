@@ -39,9 +39,9 @@ set('n', '<leader>lr', vim.lsp.buf.references, opts)
 set({ 'n', 'v', 'x' }, '<leader>y', [["+y]], opts)
 set({ 'n', 'v', 'x' }, '<leader>p', [["+p]], opts)
 
-set('n', '<leader>tl', fn.TermTest, opts)
-set('n', '<leader>tk', fn.TermRun, opts)
-set('n', '<leader>tj', ':ToggleTerm direction=vertical<CR>', opts)
+set('n', '<leader>tt', fn.TermTest, opts)
+set('n', '<leader>tr', fn.TermRun, opts)
+set('n', '<leader>to', ':ToggleTerm direction=vertical<CR>', opts)
 
 set('n', '<leader>>', fn.swap_arg_forward, opts)
 set('n', '<leader><lt>', fn.swap_arg_back, opts)
