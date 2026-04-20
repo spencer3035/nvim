@@ -214,6 +214,11 @@ local function get_project_command(isTest)
             run_cmd = 'gradle run',
         },
         {
+            root_files = { "pom.xml" },
+            test_cmd = 'mvn clean test',
+            run_cmd = 'mvn clean install',
+        },
+        {
             root_files = { 'Makefile' },
             test_cmd = 'make test',
             run_cmd = 'make run',

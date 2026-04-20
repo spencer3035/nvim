@@ -17,8 +17,7 @@ vim.api.nvim_create_autocmd(
 )
 
 function FormatWithSpotless()
-    local file = vim.fn.expand('%:p')
-    local cmd = 'mvn spotless:apply -Dspotless.files=' .. file
+    local cmd = 'mvn spotless:apply'
     vim.fn.system(cmd)
     vim.cmd('edit')
 end
@@ -33,14 +32,17 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 -- Remember last position
-vim.api.nvim_create_autocmd("BufReadPost", {
+vim.api.nvim_create_autocmd("FileType", {
     callback = function()
+        if vim.bo.filetype == 'gitcommmit' then
+            return
+        end
+
         local mark = vim.api.nvim_buf_get_mark(0, '"')
         local lcount = vim.api.nvim_buf_line_count(0)
-        local ignored_file = (vim.bo.filetype == 'gitcommit')
 
-        if mark[1] > 0 and mark[1] <= lcount and not ignored_file then
-            pcall(vim.api.nvim_win_set_cursor, 0, { mark[1], mark[2] })
+        if mark[1] > 0 and mark[1] <= lcount then
+            vim.api.nvim_win_set_cursor(0, { mark[1], mark[2] })
         end
     end,
 })

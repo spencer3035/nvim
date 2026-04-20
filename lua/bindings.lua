@@ -31,7 +31,7 @@ set('n', '<leader>c', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lu
 set('n', '<leader>q', ':tabclose<CR>', opts)
 
 -- LSP functions
-set({ 'n', 'v' }, '<leader>lf', vim.lsp.buf.format, opts)
+-- set({ 'n', 'v' }, '<leader>lf', vim.lsp.buf.format, opts)
 set('n', '<leader>ld', vim.lsp.buf.definition, opts)
 set({ 'n', 'v', 'x' }, '<leader>la', vim.lsp.buf.code_action, opts)
 set('n', '<leader>lr', vim.lsp.buf.references, opts)

@@ -6,6 +6,11 @@ local maven_repo_path = home .. "/.m2/repository"
 local launcher_path = vim.fn.expand(jdtls_path .. '/plugins/org.eclipse.equinox.launcher_*.jar')
 local lombok_path = jdtls_path .. "/lombok.jar"
 
+vim.opt.shiftwidth = 2;
+vim.opt.signcolumn = "yes";
+vim.opt.tabstop = 2;
+vim.opt.expandtab = true;
+
 
 -- Override LSP's default formatting for Java to use the Spotless formatter
 vim.lsp.handlers["textDocument/formatting"] = function(_, _, params, client_id, bufnr, config)
@@ -13,7 +18,7 @@ vim.lsp.handlers["textDocument/formatting"] = function(_, _, params, client_id, 
     local filetype = vim.api.nvim_buf_get_option(bufnr, 'filetype')
     if filetype == "java" then
         FormatWithSpotless() -- Call the custom formatter instead
-        return nil       -- Prevent LSP from formatting
+        return nil           -- Prevent LSP from formatting
     end
     -- Default LSP formatting if not Java
     vim.lsp.handlers["textDocument/formatting"](nil, nil, params, client_id, bufnr, config)

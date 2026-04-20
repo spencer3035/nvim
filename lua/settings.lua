@@ -28,6 +28,8 @@ vim.opt.relativenumber = true;
 -- Options for tabs
 vim.opt.tabclose = "uselast"
 
+-- vim.opt.cmdheight = 0
+
 -- NetRw config
 -- Needed to fix netrw, can be removed if I get my MR merged
 vim.g.netrw_keepdir = 0;
@@ -38,4 +40,5 @@ vim.filetype.add({
         ['%.gitlab%-ci%.ya?ml'] = 'yaml.gitlab',
     }
 })
--- require('vim._core.ui2').enable({})
+
+require('vim._core.ui2').enable({})
