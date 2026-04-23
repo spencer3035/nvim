@@ -21,11 +21,22 @@ vim.keymap.set('n', '<leader>df', function()
     local widgets = require('dap.ui.widgets')
     widgets.centered_float(widgets.frames)
 end)
-vim.keymap.set('n', '<leader>dp', function()
-    local widgets = require('dap.ui.widgets')
-    widgets.centered_float(widgets.scopes)
-end)
+-- vim.keymap.set('n', '<leader>d', function()
+--     local widgets = require('dap.ui.widgets')
+--     widgets.centered_float(widgets.scopes)
+-- end)
 
+-- Java Debug Adapter configuration
+-- For remote debugging, we use a simple server adapter that connects to the JVM's debug port
+dap.adapters.java = function(callback)
+    callback({
+        type = 'server',
+        host = '127.0.0.1',
+        port = 8001,
+    })
+end
+
+-- Java Debug Configurations
 dap.configurations.java = {
     {
         type = 'java',
