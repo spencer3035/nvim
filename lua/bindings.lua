@@ -15,16 +15,16 @@ set('i', '(<CR>', '(<CR>)<ESC>O');
 
 -- source init.lua
 set('n', '<leader>o', fn.reload_config, opts)
--- debug function don't captures
-set('n', '<leader>dd', function()
-    fn.debug_function()
-end, opts)
--- debug function (capture output)
-set('n', '<leader>dc', function()
-    -- fn.reload_config()
-    -- fn.debug_function()
-    fn.capture_output("lua require(\"fn\").debug_function()")
-end, opts)
+-- -- debug function don't captures
+-- set('n', '<leader>dd', function()
+--     fn.debug_function()
+-- end, opts)
+-- -- debug function (capture output)
+-- set('n', '<leader>dc', function()
+--     -- fn.reload_config()
+--     -- fn.debug_function()
+--     fn.capture_output("lua require(\"fn\").debug_function()")
+-- end, opts)
 -- Edit init.lua (config edit)
 set('n', '<leader>c', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua | tcd %:p:h<CR>', opts)
 -- Quicker way to quit

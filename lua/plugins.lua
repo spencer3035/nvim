@@ -9,6 +9,7 @@ require("plugins/toggleterm")
 require("plugins/luasnip")
 require("plugins/neogit")
 require("plugins/mini")
+require("plugins/dap")
 
 -- Sets colorscheme
 vim.pack.add({
