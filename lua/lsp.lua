@@ -23,6 +23,8 @@ vim.lsp.enable({
     "gitlab-ci-ls",
     "bashls",
     "pylsp",
+    -- "kotlin_lsp",
+    "kotlin_language_server",
 })
 
 vim.lsp.config('pylsp', {
