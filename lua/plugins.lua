@@ -1,15 +1,15 @@
 -- Installs plugins and configures them
 
-require("plugins/nvim-treesitter")
+require("plugins/arborist-ts")
+require("plugins/blink")
 require("plugins/claudecode")
 require("plugins/conform")
-require("plugins/blink")
+require("plugins/dap")
+require("plugins/luasnip")
+require("plugins/mini")
+require("plugins/neogit")
 require("plugins/oil")
 require("plugins/toggleterm")
-require("plugins/luasnip")
-require("plugins/neogit")
-require("plugins/mini")
-require("plugins/dap")
 
 -- Sets colorscheme
 vim.pack.add({
