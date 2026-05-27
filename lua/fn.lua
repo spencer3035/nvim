@@ -3,98 +3,6 @@
 
 local M = {}
 
-local function ts_args()
-    local ts = vim.treesitter
-    local node = ts.get_node()
-    if not node then return end
-
-    -- Walk up to find an argument_list node
-    while node and node:type() ~= "argument_list" do
-        node = node:parent()
-    end
-    if not node then return end
-
-    -- Collect argument nodes (skip punctuation like commas/parens)
-    local args = {}
-    for child in node:iter_children() do
-        local t = child:type()
-        if t ~= "," and t ~= "(" and t ~= ")" and t ~= "comment" then
-            table.insert(args, child)
-        end
-    end
-
-    if #args < 2 then return end
-
-    -- Find which arg the cursor is on
-    local cursor_info = vim.api.nvim_win_get_cursor(0)
-    local cursor_row = cursor_info[1]
-    local cursor_col = cursor_info[2]
-    cursor_row = cursor_row - 1 -- 0-indexed
-
-    local cursor_idx = nil
-    for i, arg in ipairs(args) do
-        local sr, sc, er, ec = arg:range()
-        if cursor_row >= sr and cursor_row <= er and
-            (cursor_row ~= sr or cursor_col >= sc) and
-            (cursor_row ~= er or cursor_col <= ec) then
-            cursor_idx = i
-            break
-        end
-    end
-
-    return
-    {
-        args = args,
-        cursor_idx = cursor_idx,
-    }
-end
-
-function M.swap_arg_forward()
-    local info = ts_args();
-    if info == nil then return end
-
-    if not info.cursor_idx or info.cursor_idx >= #info.args then return end
-
-    -- Swap the text of the two adjacent args
-    local bufnr = vim.api.nvim_get_current_buf()
-    local winnr = vim.api.nvim_get_current_win()
-    local a, b = info.args[info.cursor_idx], info.args[info.cursor_idx + 1]
-
-    local a_text = vim.treesitter.get_node_text(a, bufnr)
-    local b_text = vim.treesitter.get_node_text(b, bufnr)
-
-    local asr, asc, aer, aec = a:range()
-    local bsr, bsc, ber, bec = b:range()
-
-    -- Write b's text into a's position, a's text into b's position
-    vim.api.nvim_buf_set_text(bufnr, bsr, bsc, ber, bec, vim.split(a_text, "\n"))
-    vim.api.nvim_buf_set_text(bufnr, asr, asc, aer, aec, vim.split(b_text, "\n"))
-    vim.api.nvim_win_set_cursor(winnr, { bsr + 1, bsc })
-end
-
-function M.swap_arg_back()
-    local info = ts_args();
-    if info == nil then return end
-
-    if not info.cursor_idx or info.cursor_idx == 1 then return end
-
-    -- Swap the text of the two adjacent args
-    local bufnr = vim.api.nvim_get_current_buf()
-    local winnr = vim.api.nvim_get_current_win()
-    local a, b = info.args[info.cursor_idx - 1], info.args[info.cursor_idx]
-
-    local a_text = vim.treesitter.get_node_text(a, bufnr)
-    local b_text = vim.treesitter.get_node_text(b, bufnr)
-
-    local asr, asc, aer, aec = a:range()
-    local bsr, bsc, ber, bec = b:range()
-
-    -- Write b's text into a's position, a's text into b's position
-    vim.api.nvim_buf_set_text(bufnr, bsr, bsc, ber, bec, vim.split(a_text, "\n"))
-    vim.api.nvim_buf_set_text(bufnr, asr, asc, aer, aec, vim.split(b_text, "\n"))
-    vim.api.nvim_win_set_cursor(winnr, { asr + 1, asc })
-end
-
 function M.reload_config()
     package.loaded.plugins = nil;
     package.loaded.settings = nil;
@@ -123,66 +31,16 @@ function M.capture_output(cmd)
     vim.wo.number = false
 end
 
---- Filter avaliable code actions based on the kind provided and apply it if it gets filtered down to one.
----
---- Some helpful examples for "kind" are "add_impl_missing_members"
----
---- @param kind string Should match the title here: https://rust-analyzer.github.io/book/assists.html
-local function rust_apply_quickfix(kind)
-    vim.lsp.buf.code_action({
-        filter = function(action)
-            return action.data and action.data.id and string.match(action.data.id, kind)
-        end,
-        apply = true, -- automatically apply the action if only one remains
-    })
-end
-
--- Helper function to display code actions
-local function display_code_action_details()
-    local bufnr = vim.api.nvim_get_current_buf()
-    local params = vim.lsp.util.make_range_params(0, "utf-8")
-    params.context = {
-        triggerKind = vim.lsp.protocol.CodeActionTriggerKind.Invoked,
-        diagnostics = vim.lsp.diagnostic.get_line_diagnostics(),
-    }
-
-    vim.lsp.buf_request(bufnr, "textDocument/codeAction", params, function(err, actions, ctx, _)
-        if err then
-            vim.notify("Code action error: " .. err.message, vim.log.levels.ERROR)
-            return
-        end
-        if not actions or vim.tbl_isempty(actions) then
-            vim.notify("No code actions")
-            return
-        end
-        for _, action in pairs(actions) do
-            if action.data then
-                print("it is a data kind")
-            end
-            if action.edit then
-                print("it is a edit kind")
-            end
-            print("kind : " .. action.kind)
-            print("title : " .. action.title)
-            -- print(vim.inspect(action))
-        end
-    end)
-end
-
 function M.debug_function()
-    print("Nothing to do!")
+    print(M.get_git_root())
     -- M.swap_arg_forward()
     -- M.swap_arg_back()
 end
 
-local function special_project_commands(root_dir, isTest)
-    if root_dir == vim.fn.expand('~/dev/spenceros') then
-        if isTest then
-            return 'make test'
-        else
-            return 'make run'
-        end
-    end
+--- Get the git root directory of the current buffer
+--- @return string? The git root directory path or nil if not in a git repository
+function M.get_git_root()
+    return vim.fs.root(0, '.git')
 end
 
 --- Get the command to run for an arbitrary file open in the current buffer
