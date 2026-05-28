@@ -46,26 +46,12 @@ set('n', '<leader>ml', 'viWc[](<ESC>pa)<ESC>T/yt)F]PF[', opts)
 
 -- Quick way to change dir
 set('n', '<leader>cd', function()
-    local git_dir = fn.get_git_root()
-    if git_dir then
-        vim.cmd("lcd " .. git_dir)
-        return
+    local dir = fn.get_git_or_file_dir()
+    if dir then
+        vim.cmd("lcd " .. dir)
+    else
+        print("Error: Not in a git repository and no file in current buffer")
     end
-
-    -- Fallback to current buffer's directory
-    local buf_path = vim.api.nvim_buf_get_name(0)
-    if buf_path and buf_path ~= "" then
-        local buf_dir = vim.fn.fnamemodify(buf_path, ':p:h')
-        -- Check if it's a regular file
-        if vim.fn.filereadable(buf_path) == 1 then
-            vim.cmd("lcd " .. buf_dir)
-        else
-            print("Error: Current buffer is not a regular file")
-        end
-        return
-    end
-
-    print("Error: Not in a git repository and no file in current buffer")
 end, opts)
 
 --------------------------------------------

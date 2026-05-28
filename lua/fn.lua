@@ -32,15 +32,27 @@ function M.capture_output(cmd)
 end
 
 function M.debug_function()
-    print(M.get_git_root())
-    -- M.swap_arg_forward()
-    -- M.swap_arg_back()
 end
 
 --- Get the git root directory of the current buffer
 --- @return string? The git root directory path or nil if not in a git repository
-function M.get_git_root()
-    return vim.fs.root(0, '.git')
+function M.get_git_or_file_dir()
+    local git_dir = vim.fs.root(0, '.git')
+    if git_dir then
+        return git_dir
+    end
+
+    -- Fallback to current buffer's directory
+    local buf_path = vim.api.nvim_buf_get_name(0)
+    if buf_path and buf_path ~= "" then
+        local buf_dir = vim.fn.fnamemodify(buf_path, ':p:h')
+        -- Check if it's a regular file
+        if vim.fn.filereadable(buf_path) == 1 then
+            return buf_dir
+        end
+    end
+    -- nothing found
+    return nil
 end
 
 --- Get the command to run for an arbitrary file open in the current buffer
