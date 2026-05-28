@@ -73,6 +73,22 @@ return {
             }
         )
     ),
+    -- Expand ";d" to #[derive()]
+    s(
+        {
+            trig = ";d",
+            wordTrig = true,
+            snippetType = "autosnippet"
+        },
+        fmta(
+            [[
+            #[derive(Debug, <stop>)]
+            ]],
+            {
+                stop = i(0),
+            }
+        )
+    ),
     -- Expand ";if" to full if statement
     s(
         {
@@ -84,6 +100,27 @@ return {
             [[
             if <cond> {
                 <stop>;
+            }
+            ]],
+            {
+                cond = i(1),
+                stop = i(0),
+            }
+        )
+    ),
+    -- Expand ";ie" to full if-else statement
+    s(
+        {
+            trig = ";if",
+            wordTrig = true,
+            snippetType = "autosnippet"
+        },
+        fmta(
+            [[
+            if <cond> {
+                <stop>;
+            } else {
+                todo!();
             }
             ]],
             {

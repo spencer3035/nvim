@@ -43,7 +43,7 @@ return {
     s(
         {
             trig = ";ie",
-            -- wordTrig = true,
+            wordTrig = true,
             snippetType = "autosnippet"
         },
         fmta(
