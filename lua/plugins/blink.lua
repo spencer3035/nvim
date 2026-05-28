@@ -17,6 +17,18 @@ require('blink.cmp').setup({
             show_with_menu = true,
         },
     },
+    sources = {
+        providers = {
+            path = {
+                opts = {
+                    -- Use cwd instead of current file dir for paths
+                    get_cwd = function(_)
+                        return vim.fn.getcwd()
+                    end,
+                },
+            },
+        },
+    },
     fuzzy = { implementation = "lua" },
     keymap = { preset = 'default' },
 })
