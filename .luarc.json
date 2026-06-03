@@ -1,0 +1,10 @@
+{
+  "workspace": {
+    "library": [
+      "$VIMRUNTIME",
+      "${3rd}/luv/library",
+      "/home/littels/.local/share/nvim/site/pack/core/opt/nvim-lspconfig/lua"
+    ],
+    "checkThirdParty": false
+  }
+}
