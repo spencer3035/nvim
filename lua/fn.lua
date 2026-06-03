@@ -32,6 +32,7 @@ function M.capture_output(cmd)
 end
 
 function M.debug_function()
+    -- vim.print(t)
 end
 
 --- Get the git root directory of the current buffer

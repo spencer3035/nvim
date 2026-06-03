@@ -12,18 +12,6 @@ vim.opt.tabstop = 2;
 vim.opt.expandtab = true;
 
 
--- Override LSP's default formatting for Java to use the Spotless formatter
-vim.lsp.handlers["textDocument/formatting"] = function(_, _, params, client_id, bufnr, config)
-    -- If the Java file, call our Spotless formatter
-    local filetype = vim.api.nvim_buf_get_option(bufnr, 'filetype')
-    if filetype == "java" then
-        FormatWithSpotless() -- Call the custom formatter instead
-        return nil           -- Prevent LSP from formatting
-    end
-    -- Default LSP formatting if not Java
-    vim.lsp.handlers["textDocument/formatting"](nil, nil, params, client_id, bufnr, config)
-end
-
 local jdtls_config = {
     cmd = {
         java_path .. "/bin/java", -- Path to your specific Java version
@@ -60,11 +48,7 @@ local jdtls_config = {
                 -- },
             },
             format = {
-                profile = "GoogleStyle",
-                url = "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
-                comments = {
-                    enabled = false
-                },
+                enabled = false, -- Disable Eclipse formatter, use google-java-format instead
             },
             compile = {
                 nullAnalysis = {
@@ -81,3 +65,39 @@ local jdtls_config = {
 }
 
 require('jdtls').start_or_attach(jdtls_config)
+
+-- Override LSP formatting to use google-java-format
+local function format_with_google_java_format()
+    local file = vim.api.nvim_buf_get_name(0)
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+
+    vim.fn.system('google-java-format --replace "' .. file .. '"')
+    vim.cmd('edit!')
+    vim.api.nvim_win_set_cursor(0, cursor_pos)
+end
+
+-- Hook into LSP formatting
+vim.api.nvim_create_autocmd('LspAttach', {
+    buffer = vim.api.nvim_get_current_buf(),
+    callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client and client.name == 'jdtls' then
+            -- Override format handler for this buffer
+            vim.bo[args.buf].formatexpr = ''
+
+            -- Create a buffer-local format command
+            vim.api.nvim_buf_create_user_command(args.buf, 'Format', format_with_google_java_format, {})
+
+            -- Override vim.lsp.buf.format() for this buffer
+            local original_format = vim.lsp.buf.format
+            vim.lsp.buf.format = function(opts)
+                opts = opts or {}
+                if vim.bo.filetype == 'java' then
+                    format_with_google_java_format()
+                else
+                    original_format(opts)
+                end
+            end
+        end
+    end,
+})

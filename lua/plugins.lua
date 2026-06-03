@@ -3,7 +3,6 @@
 require("plugins/arborist-ts")
 require("plugins/blink")
 require("plugins/claudecode")
-require("plugins/conform")
 require("plugins/dap")
 require("plugins/luasnip")
 require("plugins/mini")
