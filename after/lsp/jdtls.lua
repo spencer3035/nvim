@@ -5,9 +5,10 @@ local config = {
         java = {
             compile = {
                 nullAnalysis = {
-                    mode = "automatic",
+                    mode = "interactive",
                 }
-            }
+            },
+            format = {}
         }
     }
 }

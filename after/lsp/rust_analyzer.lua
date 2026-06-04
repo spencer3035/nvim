@@ -8,7 +8,6 @@ local config = {
             }
         }
     }
-
 }
 
 return config

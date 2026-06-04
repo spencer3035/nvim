@@ -1,14 +1,14 @@
 vim.pack.add({
-  { src = 'https://github.com/coder/claudecode.nvim' },
-  -- { src = 'https://github.com/folke/snacks.nvim' }, -- dependency of claudecode
+    { src = 'https://github.com/coder/claudecode.nvim' },
+    -- { src = 'https://github.com/folke/snacks.nvim' }, -- dependency of claudecode
 })
 require("claudecode").setup({
-  command = "/home/littels/.local/bin/claude",
-  auto_start = true,
-  terminal = {
-    split_side = "right",
-  },
-  git_repo_cwd = true,
+    command = "/home/littels/.local/bin/claude",
+    auto_start = true,
+    terminal = {
+        split_side = "right",
+    },
+    git_repo_cwd = true,
 })
 vim.keymap.set("n", "<leader>ac", "<cmd>ClaudeCodeClose<cr>")
 vim.keymap.set("n", "<leader>ao", "<cmd>ClaudeCodeFocus<cr>")
