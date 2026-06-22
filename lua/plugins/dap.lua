@@ -12,14 +12,14 @@ vim.keymap.set('n', '<leader>dB', function() dap.set_breakpoint() end)
 -- vim.keymap.set('n', '<leader>dr', function() require('dap').repl.open() end)
 -- vim.keymap.set('n', '<leader>dl', function() require('dap').run_last() end)
 vim.keymap.set({ 'n', 'v' }, '<leader>dh', function()
-    require('dap.ui.widgets').hover()
+  require('dap.ui.widgets').hover()
 end)
 vim.keymap.set({ 'n', 'v' }, '<leader>dp', function()
-    require('dap.ui.widgets').preview()
+  require('dap.ui.widgets').preview()
 end)
 vim.keymap.set('n', '<leader>df', function()
-    local widgets = require('dap.ui.widgets')
-    widgets.centered_float(widgets.frames)
+  local widgets = require('dap.ui.widgets')
+  widgets.centered_float(widgets.frames)
 end)
 -- vim.keymap.set('n', '<leader>d', function()
 --     local widgets = require('dap.ui.widgets')
@@ -28,21 +28,21 @@ end)
 
 -- Java Debug Adapter configuration
 -- For remote debugging, we use a simple server adapter that connects to the JVM's debug port
-dap.adapters.java = function(callback)
-    callback({
-        type = 'server',
-        host = '127.0.0.1',
-        port = 8001,
-    })
-end
+-- dap.adapters.java = function(callback)
+--     callback({
+--         type = 'server',
+--         host = '127.0.0.1',
+--         port = 8001,
+--     })
+-- end
 
 -- Java Debug Configurations
-dap.configurations.java = {
-    {
-        type = 'java',
-        request = 'attach',
-        name = "Debug (Attach) - Remote",
-        hostName = "127.0.0.1",
-        port = 8001,
-    },
-}
+-- dap.configurations.java = {
+--   {
+--     type = 'java',
+--     request = 'attach',
+--     name = "Debug (Attach) - Remote",
+--     hostName = "127.0.0.1",
+--     port = 8001,
+--   },
+-- }

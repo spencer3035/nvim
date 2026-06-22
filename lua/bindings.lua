@@ -23,6 +23,10 @@ end, opts)
 set('n', '<leader>ce', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua | tcd %:p:h<CR>', opts)
 -- Quicker way to quit
 set('n', '<leader>q', ':tabclose<CR>', opts)
+-- Quicker way to save and quit
+set('n', '<leader>x', ':x<CR>', opts)
+-- Quicker way to save
+set('n', '<leader>w', ':w<CR>', opts)
 
 -- LSP functions
 set({ 'n', 'v' }, '<leader>lf', vim.lsp.buf.format, opts)
