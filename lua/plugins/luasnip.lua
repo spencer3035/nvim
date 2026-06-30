@@ -9,8 +9,11 @@ require('luasnip.loaders.from_lua').load({ paths = "~/.config/nvim/snippets" })
 local opts = { noremap = true, silent = true }
 local set = vim.keymap.set;
 
+-- Jump back
 set('i', "<C-h>", function() ls.jump(-1) end, opts)
+-- Jump forward
 set('i', "<C-l>", function() ls.jump(1) end, opts)
+-- exit
 set('i', "<C-e>", function()
     local snip = ls.get_active_snip()
     if snip ~= nil then
@@ -19,6 +22,7 @@ set('i', "<C-e>", function()
         return '<C-e>'
     end
 end, { silent = true, expr = true })
+-- Cylcle choices
 set('i', "<C-p>", function()
     if ls.choice_active() then
         ls.change_choice(-1)
@@ -27,6 +31,7 @@ set('i', "<C-p>", function()
         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-p>', true, false, true), 'n', false)
     end
 end, opts)
+-- Cylcle choices
 set('i', "<C-n>", function()
     if ls.choice_active() then
         ls.change_choice(1)

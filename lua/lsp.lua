@@ -10,8 +10,7 @@ vim.pack.add({
 require("mason").setup()
 
 -- Enable desired LSPs
--- Note that their configs are in nvim/lsp/*
--- Go there if you want to make changes to them
+-- Note that their base configs are provided by nvim-lspconfig and overrides are in ~/.config/nvim/after/lsp/*
 vim.lsp.enable({
     "jsonls",
     "lua_ls",
@@ -23,17 +22,8 @@ vim.lsp.enable({
     "gitlab-ci-ls",
     "bashls",
     "pylsp",
-})
-
-vim.lsp.config('pylsp', {
-    settings = {
-        pylsp = {
-            plugins = {
-                pycodestyle = {
-                    ignore = { 'W391' },
-                    maxLineLength = 100
-                }
-            }
-        }
-    }
+    -- Doesn't work as well
+    -- "kotlin_lsp",
+    "kotlin_language_server",
+    "jdtls",
 })

@@ -16,12 +16,6 @@ vim.api.nvim_create_autocmd(
     }
 )
 
-function FormatWithSpotless()
-    local cmd = 'mvn spotless:apply'
-    vim.fn.system(cmd)
-    vim.cmd('edit')
-end
-
 vim.api.nvim_create_autocmd('LspAttach', {
     callback = function()
         local clients = vim.lsp.get_clients({ name = "jdtls" })

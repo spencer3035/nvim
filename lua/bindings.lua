@@ -15,23 +15,21 @@ set('i', '(<CR>', '(<CR>)<ESC>O');
 
 -- source init.lua
 set('n', '<leader>o', fn.reload_config, opts)
--- debug function don't captures
-set('n', '<leader>dd', function()
+-- -- debug function don't captures
+set('n', '<leader>?', function()
     fn.debug_function()
 end, opts)
--- debug function (capture output)
-set('n', '<leader>dc', function()
-    -- fn.reload_config()
-    -- fn.debug_function()
-    fn.capture_output("lua require(\"fn\").debug_function()")
-end, opts)
 -- Edit init.lua (config edit)
-set('n', '<leader>c', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua | tcd %:p:h<CR>', opts)
+set('n', '<leader>ce', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua | tcd %:p:h<CR>', opts)
 -- Quicker way to quit
 set('n', '<leader>q', ':tabclose<CR>', opts)
+-- Quicker way to save and quit
+set('n', '<leader>x', ':x<CR>', opts)
+-- Quicker way to save
+set('n', '<leader>w', ':w<CR>', opts)
 
 -- LSP functions
--- set({ 'n', 'v' }, '<leader>lf', vim.lsp.buf.format, opts)
+set({ 'n', 'v' }, '<leader>lf', vim.lsp.buf.format, opts)
 set('n', '<leader>ld', vim.lsp.buf.definition, opts)
 set({ 'n', 'v', 'x' }, '<leader>la', vim.lsp.buf.code_action, opts)
 set('n', '<leader>lr', vim.lsp.buf.references, opts)
@@ -39,15 +37,26 @@ set('n', '<leader>lr', vim.lsp.buf.references, opts)
 set({ 'n', 'v', 'x' }, '<leader>y', [["+y]], opts)
 set({ 'n', 'v', 'x' }, '<leader>p', [["+p]], opts)
 
+-- TODO: Want
+-- o - open if not already open
+-- c - close if not already closed
+-- f - focus and enter insert mode
 set('n', '<leader>tt', fn.TermTest, opts)
 set('n', '<leader>tr', fn.TermRun, opts)
 set('n', '<leader>to', ':ToggleTerm direction=vertical<CR>', opts)
 
-set('n', '<leader>>', fn.swap_arg_forward, opts)
-set('n', '<leader><lt>', fn.swap_arg_back, opts)
-
 -- Convert url to markdown link with text set to final path in url
 set('n', '<leader>ml', 'viWc[](<ESC>pa)<ESC>T/yt)F]PF[', opts)
+
+-- Quick way to change dir
+set('n', '<leader>cd', function()
+    local dir = fn.get_git_or_file_dir()
+    if dir then
+        vim.cmd("lcd " .. dir)
+    else
+        print("Error: Not in a git repository and no file in current buffer")
+    end
+end, opts)
 
 --------------------------------------------
 ------------ TERMINAL MODE -----------------

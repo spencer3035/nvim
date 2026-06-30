@@ -19,6 +19,7 @@ vim.opt.wildmode = 'longest:full'
 vim.opt.winborder = "rounded"
 -- see :h vim.diagnostic.Opts
 vim.diagnostic.config({ virtual_text = true, });
+vim.opt.wrap = true
 
 -- Line numbering
 vim.opt.number = true;

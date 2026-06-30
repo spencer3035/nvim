@@ -3,6 +3,7 @@ vim.pack.add({
     -- { src = 'https://github.com/folke/snacks.nvim' }, -- dependency of claudecode
 })
 require("claudecode").setup({
+    command = "/home/littels/.local/bin/claude",
     auto_start = true,
     terminal = {
         split_side = "right",
