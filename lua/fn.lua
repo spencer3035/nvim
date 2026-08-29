@@ -162,25 +162,41 @@ local function get_project_command(isTest)
     return nil
 end
 
-local function run_new_terminal_command(cmd)
-    vim.cmd("TermExec direction=vertical cmd=reset")
-    vim.cmd("TermExec direction=vertical cmd=\"" .. cmd .. "\"")
-end
-
 -- Run a project specific command in a scratch terminal window
-function M.TermRun()
-    local cmd = get_project_command(false);
-    if cmd ~= nil then
-        run_new_terminal_command(cmd)
-    end
+function M.TermRunCmd()
+    return get_project_command(false);
 end
 
 -- Run a project specific test or build command in a scratch terminal window
-function M.TermTest()
-    local cmd = get_project_command(true);
-    if cmd ~= nil then
-        run_new_terminal_command(cmd)
+function M.TermTestCmd()
+    return get_project_command(true);
+end
+
+--- Convert GitHub URLs to local paths if USE_LOCAL_PLUGINS is set
+--- @param url string GitHub URL or local path
+--- @return string The original URL or converted local path
+function M.maybe_local_plugin(url)
+    vim.g.LOCAL_PLUGINS_PATH = "/home/littels/.local/share/nvim/site/pack/core/opt"
+    vim.g.USE_LOCAL_PLUGINS = true
+    local use_local = vim.g.USE_LOCAL_PLUGINS
+
+    if not use_local then
+        return url
     end
+
+    -- If it's already a local path, return as-is
+    if not url:match('^https?://') then
+        return url
+    end
+
+    -- Parse GitHub URL and convert to local path
+    local org, repo = url:match('github%.com/([^/]+)/([^/]+)/?$')
+    if org and repo then
+        local base_path = vim.g.LOCAL_PLUGINS_PATH or (vim.fn.expand('~') .. '/dev/git')
+        return base_path .. '/' .. repo
+    end
+
+    return url
 end
 
 return M

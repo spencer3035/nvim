@@ -1,5 +1,8 @@
 -- Installs plugins and configures them
 
+-- Setup before others because it is a dependency
+require("plugins/snacks")
+
 require("plugins/arborist-ts")
 require("plugins/blink")
 -- require("plugins/claudecode")
@@ -8,12 +11,12 @@ require("plugins/luasnip")
 require("plugins/mini")
 require("plugins/neogit")
 require("plugins/oil")
-require("plugins/toggleterm")
--- require("plugins/mustache-support").setup()
 
 -- Sets colorscheme
+local fn = require('fn')
+
 vim.pack.add({
-    { src = "https://github.com/folke/tokyonight.nvim" },
+    { src = fn.maybe_local_plugin("https://github.com/folke/tokyonight.nvim") },
 })
 require('tokyonight').setup(
     {

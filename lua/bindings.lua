@@ -8,6 +8,8 @@ local opts = { noremap = true, silent = true }
 
 set('i', '{<CR>', '{<CR>}<ESC>O');
 set('i', '(<CR>', '(<CR>)<ESC>O');
+-- Quicker way to quit
+set('i', '<C-q>', '<ESC>:q<CR>', opts)
 
 --------------------------------------------
 ------------- NORMAL MODE ------------------
@@ -23,6 +25,7 @@ end, opts)
 set('n', '<leader>ce', ':tabnew ' .. vim.fn.expand('~') .. '/.config/nvim/init.lua | tcd %:p:h<CR>', opts)
 -- Quicker way to quit
 set('n', '<leader>q', ':tabclose<CR>', opts)
+set('n', '<C-q>', ':q<CR>', opts)
 -- Quicker way to save and quit
 set('n', '<leader>x', ':x<CR>', opts)
 -- Quicker way to save
@@ -35,15 +38,8 @@ set({ 'n', 'v', 'x' }, '<leader>la', vim.lsp.buf.code_action, opts)
 set('n', '<leader>lr', vim.lsp.buf.references, opts)
 
 set({ 'n', 'v', 'x' }, '<leader>y', [["+y]], opts)
+set({ 'n', 'v', 'x' }, '<leader>yf', function() vim.fn.setreg('"', vim.fn.expand('%:p')) end, opts)
 set({ 'n', 'v', 'x' }, '<leader>p', [["+p]], opts)
-
--- TODO: Want
--- o - open if not already open
--- c - close if not already closed
--- f - focus and enter insert mode
-set('n', '<leader>tt', fn.TermTest, opts)
-set('n', '<leader>tr', fn.TermRun, opts)
-set('n', '<leader>to', ':ToggleTerm direction=vertical<CR>', opts)
 
 -- Convert url to markdown link with text set to final path in url
 set('n', '<leader>ml', 'viWc[](<ESC>pa)<ESC>T/yt)F]PF[', opts)
@@ -66,7 +62,6 @@ end, opts)
 set('t', '<Esc>', '<C-\\><C-n>')
 -- Map the default terminal escape sequence to send an escape character
 set('t', '<C-\\><C-n>', '<Esc>')
-set('t', 'kj', '<C-\\><C-n>', { silent = true, desc = "Exit insert mode" })
 
 --------------------------------------------
 ------------- VISUAL MODE ------------------

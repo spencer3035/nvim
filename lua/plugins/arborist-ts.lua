@@ -1,4 +1,6 @@
+local fn = require('fn')
+
 vim.pack.add({
-    "https://github.com/arborist-ts/arborist.nvim",
+    { src = fn.maybe_local_plugin("https://github.com/arborist-ts/arborist.nvim") },
 })
 require("arborist").setup()

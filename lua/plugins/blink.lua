@@ -1,4 +1,6 @@
-vim.pack.add({ { src = 'https://github.com/saghen/blink.cmp', version = "v1" } })
+local fn = require('fn')
+
+vim.pack.add({ { src = fn.maybe_local_plugin('https://github.com/saghen/blink.cmp'), version = "v1" } })
 
 require('blink.cmp').setup({
     cmdline = {

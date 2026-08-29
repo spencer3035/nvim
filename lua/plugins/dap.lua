@@ -1,4 +1,6 @@
-vim.pack.add({ 'https://github.com/mfussenegger/nvim-dap' })
+local fn = require('fn')
+
+vim.pack.add({ fn.maybe_local_plugin('https://github.com/mfussenegger/nvim-dap') })
 
 local dap = require('dap');
 

@@ -1,5 +1,7 @@
 -- Snippet engine
-vim.pack.add({ "https://github.com/L3MON4D3/LuaSnip" })
+local fn = require('fn')
+
+vim.pack.add({ fn.maybe_local_plugin("https://github.com/L3MON4D3/LuaSnip") })
 local ls = require('luasnip')
 ls.setup({ enable_autosnippets = true })
 require('luasnip.loaders.from_lua').load({ paths = "~/.config/nvim/snippets" })

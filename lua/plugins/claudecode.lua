@@ -1,6 +1,8 @@
+local fn = require('fn')
+
 vim.pack.add({
-    { src = 'https://github.com/coder/claudecode.nvim' },
-    -- { src = 'https://github.com/folke/snacks.nvim' }, -- dependency of claudecode
+    { src = fn.maybe_local_plugin('https://github.com/coder/claudecode.nvim') },
+    -- { src = fn.maybe_local_plugin('https://github.com/folke/snacks.nvim') }, -- dependency of claudecode
 })
 require("claudecode").setup({
     command = "/home/littels/.local/bin/claude",

@@ -1,5 +1,7 @@
 -- File manager that doesn't suck (netrw)
-vim.pack.add({ 'https://github.com/stevearc/oil.nvim' })
+local fn = require('fn')
+
+vim.pack.add({ fn.maybe_local_plugin('https://github.com/stevearc/oil.nvim') })
 require("oil").setup({
     keymaps = {
         ["<C-p>"] = { "actions.preview", opts = { split = "botright" } }
