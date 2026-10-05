@@ -1,0 +1,5 @@
+-- Work-specific configuration.
+--
+-- This module is loaded only when NVIM_WORK_CONFIG=1. Keep changes that are
+-- useful only for work in this file so the shared configuration stays easy to
+-- rebase and send upstream.

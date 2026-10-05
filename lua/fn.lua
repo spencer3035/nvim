@@ -9,6 +9,7 @@ function M.reload_config()
     package.loaded.bindings = nil;
     package.loaded.auto_commands = nil;
     package.loaded.fn = nil;
+    package.loaded.work = nil;
     dofile(vim.fn.stdpath("config") .. "/init.lua")
 end
 
