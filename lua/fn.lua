@@ -3,16 +3,6 @@
 
 local M = {}
 
-function M.reload_config()
-    package.loaded.plugins = nil;
-    package.loaded.settings = nil;
-    package.loaded.bindings = nil;
-    package.loaded.auto_commands = nil;
-    package.loaded.fn = nil;
-    package.loaded.work = nil;
-    dofile(vim.fn.stdpath("config") .. "/init.lua")
-end
-
 function M.get_visual_selection()
     -- Use vim.fn.mode() instead of api, it accurately reflects visual modes
     local mode = vim.fn.mode()

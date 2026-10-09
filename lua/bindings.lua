@@ -15,8 +15,8 @@ set('i', '<C-q>', '<ESC>:q<CR>', opts)
 ------------- NORMAL MODE ------------------
 --------------------------------------------
 
--- source init.lua
-set('n', '<leader>o', fn.reload_config, opts)
+-- Restart Nvim so all configuration and plugin state starts fresh.
+set('n', '<leader>o', '<Cmd>restart<CR>', opts)
 -- -- debug function don't captures
 set('n', '<leader>?', function()
     fn.debug_function()
