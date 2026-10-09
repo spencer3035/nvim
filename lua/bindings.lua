@@ -37,12 +37,15 @@ set('n', '<leader>ld', vim.lsp.buf.definition, opts)
 set({ 'n', 'v', 'x' }, '<leader>la', vim.lsp.buf.code_action, opts)
 set('n', '<leader>lr', vim.lsp.buf.references, opts)
 
-set({ 'n', 'v', 'x' }, '<leader>y', [["+y]], opts)
 set({ 'n', 'v', 'x' }, '<leader>yf', function() vim.fn.setreg('"', vim.fn.expand('%:p')) end, opts)
 set({ 'n', 'v', 'x' }, '<leader>p', [["+p]], opts)
 
 -- Convert url to markdown link with text set to final path in url
 set('n', '<leader>ml', 'viWc[](<ESC>pa)<ESC>T/yt)F]PF[', opts)
+
+set('n', '<leader>bu', function()
+    fn.import_java_fqdn()
+end, opts)
 
 -- Quick way to change dir
 set('n', '<leader>cd', function()
@@ -59,9 +62,9 @@ end, opts)
 --------------------------------------------
 
 -- Make <Esc> return to normal mode when in terminal mode
-set('t', '<Esc>', '<C-\\><C-n>')
+-- set('t', '<Esc>', '<C-\\><C-n>')
 -- Map the default terminal escape sequence to send an escape character
-set('t', '<C-\\><C-n>', '<Esc>')
+-- set('t', '<C-\\><C-n>', '<Esc>')
 
 --------------------------------------------
 ------------- VISUAL MODE ------------------
@@ -106,13 +109,3 @@ vim.cmd('digraphs f? ' .. vim.fn.char2nr("？"))
 --------------------------------------------
 ------------- USER COMMANDS ----------------
 --------------------------------------------
-
--- Create the user command :CaptureOutput {cmd}
---
--- This takes the output of the command and puts it in a scratch buffer instead of the internal pager.
-vim.api.nvim_create_user_command("CaptureOutput", function(opt)
-    fn.capture_output(opt.args)
-end, {
-    nargs = "+",         -- Require at least one arg (the command)
-    complete = "command" -- Allow tab-completion of commands
-})

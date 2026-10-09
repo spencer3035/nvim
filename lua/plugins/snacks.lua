@@ -13,7 +13,7 @@ require('snacks').setup(
                 position = "right",
                 keys = {
                     term_normal = false, -- Disable the double-escape timer behavior
-                    ["<esc>"] = {
+                    ["<C-e>"] = {
                         function(self)
                             vim.cmd("stopinsert")
                         end,

@@ -1,5 +1,5 @@
 local home = vim.fn.expand('~')
-local java_path = home .. '/.sdkman/candidates/java/21.0.9-amzn'
+local java_path = os.getenv('JAVA_HOME') or home .. '/.sdkman/candidates/java/21.0.9-amzn'
 local jdtls_path = home .. "/.local/share/nvim/mason/packages/jdtls"
 local maven_repo_path = home .. "/.m2/repository"
 local launcher_path = vim.fn.expand(jdtls_path .. '/plugins/org.eclipse.equinox.launcher_*.jar')

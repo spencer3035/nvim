@@ -12,27 +12,105 @@ function M.reload_config()
     dofile(vim.fn.stdpath("config") .. "/init.lua")
 end
 
--- Captures output of arbitraty ex command to a scratch buffer for seraching or copying from
-function M.capture_output(cmd)
-    -- Capture output of any command as a string
-    local output = vim.fn.execute(cmd)
-    local lines = vim.split(output, "\n", { plain = true })
+function M.get_visual_selection()
+    -- Use vim.fn.mode() instead of api, it accurately reflects visual modes
+    local mode = vim.fn.mode()
 
-    -- Open a new scratch buffer in a split
-    vim.cmd("botright new")
-    vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+    -- Explicitly pass the correct selection type mappings
+    local type_map = {
+        ['v'] = 'v',
+        ['V'] = 'V',
+        ['\22'] = 'b' -- This is the internal representation for <C-v> (Blockwise)
+    }
 
-    -- Make it a clean scratch buffer
-    vim.bo.buftype = "nofile"
-    vim.bo.bufhidden = "wipe"
-    vim.bo.swapfile = false
-    vim.bo.filetype = "output"
-    vim.wo.wrap = false
-    vim.wo.number = false
+    local select_type = type_map[mode] or 'v'
+
+    -- Fetch the text region using the visual anchor 'v' and current cursor '.'
+    local lines = vim.fn.getregion(vim.fn.getpos("v"), vim.fn.getpos("."), { type = select_type })
+
+    return table.concat(lines, "\n")
 end
 
 function M.debug_function()
     -- vim.print(t)
+end
+
+-- Extract Java fully qualified class name and add import
+-- Handles: com.example.MyExample, myfunc(com.example.MyExample), myfunc(com.example.MyExample.class)
+-- Works with arbitrary nesting levels (a.b.c.d.MyExample)
+function M.import_java_fqdn()
+    local line = vim.api.nvim_get_current_line()
+    local col = vim.api.nvim_win_get_cursor(0)[2]
+
+    -- Expand selection to capture the full qualified name
+    -- Pattern matches: word chars, dots, and looks for boundaries like parens, spaces, semicolons
+    local before = line:sub(1, col + 1)
+    local after = line:sub(col + 1)
+
+    -- Find start: search backward for non-package characters
+    local start_pos = before:reverse():find('[^%w.]')
+    start_pos = start_pos and (#before - start_pos + 1) or 0
+
+    -- Find end: search forward for non-package characters (including .class)
+    local end_pos = after:find('[^%w.]')
+    end_pos = end_pos and (col + end_pos) or #line + 1
+
+    -- Extract the text
+    local text = line:sub(start_pos + 1, end_pos - 1)
+
+    -- Check if .class suffix is present and remove it for import processing
+    local has_class_suffix = text:match('%.class$')
+    text = text:gsub('%.class$', '')
+
+    -- Check if it looks like a fully qualified class name (at least one dot)
+    if not text:match('%.') then
+        print("Not a fully qualified class name: " .. text)
+        return
+    end
+
+    -- Extract package and class name
+    local package, class_name = text:match('^(.+)%.([^%.]+)$')
+    if not package or not class_name then
+        print("Could not parse class name from: " .. text)
+        return
+    end
+
+    local import_statement = 'import ' .. package .. '.' .. class_name .. ';'
+
+    -- Determine the replacement text (preserve .class if it was present)
+    local replacement_text = has_class_suffix and (class_name .. '.class') or class_name
+
+    -- Find the last import line
+    local current_line_num = vim.api.nvim_win_get_cursor(0)[1]
+    local last_import_line = 0
+
+    for i = 1, current_line_num - 1 do
+        local check_line = vim.api.nvim_buf_get_lines(0, i - 1, i, false)[1]
+        if check_line and check_line:match('^import ') then
+            last_import_line = i
+        end
+    end
+
+    -- Check if import already exists
+    local all_lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    for _, check_line in ipairs(all_lines) do
+        if check_line == import_statement then
+            print("Import already exists: " .. import_statement)
+            -- Still replace the qualified name with just the class name (preserving .class if present)
+            local new_line = line:sub(1, start_pos) .. replacement_text .. line:sub(end_pos)
+            vim.api.nvim_set_current_line(new_line)
+            return
+        end
+    end
+
+    -- Insert the import after the last import (or at line 1 if no imports found)
+    local insert_line = last_import_line > 0 and last_import_line or 1
+    vim.api.nvim_buf_set_lines(0, insert_line, insert_line, false, { import_statement })
+    print("Added: " .. import_statement)
+
+    -- Replace the fully qualified name with just the class name in the current line (preserving .class if present)
+    local new_line = line:sub(1, start_pos) .. replacement_text .. line:sub(end_pos)
+    vim.api.nvim_set_current_line(new_line)
 end
 
 --- Get the git root directory of the current buffer

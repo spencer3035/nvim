@@ -5,12 +5,11 @@ require("plugins/snacks")
 
 require("plugins/arborist-ts")
 require("plugins/blink")
-require("plugins/claudecode")
--- require("plugins/opencode")
 require("plugins/dap")
 require("plugins/luasnip")
 require("plugins/mini")
 require("plugins/neogit")
+require("plugins/opencode")
 require("plugins/oil")
 
 -- Sets colorscheme

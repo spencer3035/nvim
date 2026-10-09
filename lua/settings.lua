@@ -43,3 +43,6 @@ vim.filetype.add({
 })
 
 require('vim._core.ui2').enable({})
+
+-- Mouse behavior makes a mess of everything
+vim.opt.mouse = ""

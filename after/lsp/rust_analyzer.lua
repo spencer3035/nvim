@@ -4,7 +4,7 @@ local config = {
     settings = {
         ["rust-analyzer"] = {
             check = {
-                command = "clippy"
+                command = "clippy",
             }
         }
     }
