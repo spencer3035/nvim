@@ -7,14 +7,14 @@
 
 vim.g.work_config_enabled = vim.env.NVIM_WORK_CONFIG == '1'
 
-require('settings');
-require('bindings');
-require('plugins');
-require('lsp');
-require('auto_commands');
-
 -- Keep work-specific configuration separate from the shared configuration.
 -- Enable it with: NVIM_WORK_CONFIG=1 nvim
 if vim.g.work_config_enabled then
     require('work');
 end
+
+require('settings');
+require('bindings');
+require('plugins');
+require('lsp');
+require('auto_commands');

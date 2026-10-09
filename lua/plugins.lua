@@ -2,8 +2,10 @@
 
 -- Setup before others because it is a dependency
 require("plugins/snacks")
-
-require("plugins/arborist-ts")
+-- Only enable if not work
+if not vim.g.work_config_enabled then
+    require("plugins/arborist-ts")
+end
 require("plugins/blink")
 require("plugins/dap")
 require("plugins/luasnip")

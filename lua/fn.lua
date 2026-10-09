@@ -255,8 +255,6 @@ end
 --- @param url string GitHub URL or local path
 --- @return string The original URL or converted local path
 function M.maybe_local_plugin(url)
-    vim.g.LOCAL_PLUGINS_PATH = "/home/littels/.local/share/nvim/site/pack/core/opt"
-    vim.g.USE_LOCAL_PLUGINS = false
     local use_local = vim.g.USE_LOCAL_PLUGINS
 
     if not use_local then
