@@ -16,7 +16,7 @@ set('i', '<C-q>', '<ESC>:q<CR>', opts)
 --------------------------------------------
 
 -- Restart Nvim so all configuration and plugin state starts fresh.
-set('n', '<leader>o', '<Cmd>restart<CR>', opts)
+set('n', '<leader>o', fn.restart_nvim, opts)
 -- -- debug function don't captures
 set('n', '<leader>?', function()
     fn.debug_function()

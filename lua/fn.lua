@@ -3,6 +3,14 @@
 
 local M = {}
 
+function M.restart_nvim()
+    local session = vim.fn.stdpath("state") .. "/restart-session.vim"
+    local escaped_session = vim.fn.fnameescape(session)
+
+    vim.cmd("mksession! " .. escaped_session)
+    vim.cmd("restart source " .. escaped_session)
+end
+
 function M.get_visual_selection()
     -- Use vim.fn.mode() instead of api, it accurately reflects visual modes
     local mode = vim.fn.mode()
